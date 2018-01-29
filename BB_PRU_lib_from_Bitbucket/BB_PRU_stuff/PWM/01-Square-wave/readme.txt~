@@ -1,0 +1,15 @@
+See Derek Molloy's book 'exploring beaglebone' (:~/exploringBB/chp13/PRUClock) or chp14/fixedClock or something
+
+
+This program has the PRU generate a 100kHz square wave by:
+1. set pin P9_27 high
+2. count from 500 to 0
+3. set pin low
+4. count from 500 to 0
+5. repeat
+
+The C code loads the PRU with these instructions and starts the PRU running.
+
+You can verify this code w/ a oscilloscope, see pic taken Aug 22, 2016 on my iphone.
+
+The PRU continues to generate the square wave even after the C code completes. It's not a problem to let the PRU contiune to run even while the main CPU is doing other stuff.

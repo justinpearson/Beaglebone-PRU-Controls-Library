@@ -1,0 +1,133 @@
+#include "jpp-pru-lib.h"
+#include <stdio.h> // printf
+#include <stdlib.h> // exit
+#include <string.h> //  memcpy
+#include <unistd.h> // usleep
+int main() {
+
+  start_pru();
+
+
+  unsigned int stby = 0;
+  unsigned int ain1 = 1;
+  unsigned int ain2 = 2;
+  unsigned int pwm  = 5;
+  unsigned int lo = 0;
+  unsigned int hi = 1;
+
+  unsigned int STBY = (lo << stby) | (lo << ain1) | (lo << ain2) | (lo << pwm);
+  unsigned int BRAKE= (hi << stby) | (lo << ain1) | (hi << ain2) | (lo << pwm);
+  unsigned int CW   = (hi << stby) | (hi << ain1) | (lo << ain2) | (hi << pwm);
+  unsigned int CCW  = (hi << stby) | (lo << ain1) | (hi << ain2) | (hi << pwm);
+
+  printf("%x\t%x\t%x\t%x\n",STBY,BRAKE,CW,CCW);
+
+
+
+
+
+  CommandBuffer b;
+  DataBuffer before;
+
+
+
+  //////////////////
+
+  printf("Before STBY:\n");
+  get_data_buf( &before );
+  print_data_buf( before );
+
+  // Set to standby
+  for( int i=0; i<PKTS_PER_CMD_BUFFER; i++ ) {
+    b[i].cycle_count = 0x11111111;
+    b[i].sample_num  = 0x22222222;
+    b[i].gpio        = CW;
+    b[i].duty        = 0x33333333;
+  }
+
+  printf("Sending cmd...\n");
+  set_cmd_buf( b );
+
+  /* sleep(1); */
+
+  /* //////////////////// */
+
+
+  /* printf("Before CW:\n"); */
+  /* get_data_buf( &before ); */
+  /* print_data_buf( before ); */
+
+  /* for( int i=0; i<PKTS_PER_CMD_BUFFER; i++ ) { */
+  /*   b[i].cycle_count = 0x11111111; */
+  /*   b[i].sample_num  = 0x22222222; */
+  /*   b[i].gpio        = CW; */
+  /*   b[i].duty        = 0x33333333; */
+  /* } */
+
+  /* printf("Sending cmd...\n"); */
+  /* set_cmd_buf( b ); */
+
+  /* sleep(1); */
+  /* ////////////////// */
+
+  /* printf("Before BRAKE:\n"); */
+  /* get_data_buf( &before ); */
+  /* print_data_buf( before ); */
+
+  /* // Set to standby */
+  /* for( int i=0; i<PKTS_PER_CMD_BUFFER; i++ ) { */
+  /*   b[i].cycle_count = 0x11111111; */
+  /*   b[i].sample_num  = 0x22222222; */
+  /*   b[i].gpio        = BRAKE; */
+  /*   b[i].duty        = 0x33333333; */
+  /* } */
+
+  /* printf("Sending cmd...\n"); */
+  /* set_cmd_buf( b ); */
+
+  /* sleep(1); */
+
+  /* ////////////////// */
+
+  /* printf("Before CCW:\n"); */
+  /* get_data_buf( &before ); */
+  /* print_data_buf( before ); */
+
+  /* // Set to standby */
+  /* for( int i=0; i<PKTS_PER_CMD_BUFFER; i++ ) { */
+  /*   b[i].cycle_count = 0x11111111; */
+  /*   b[i].sample_num  = 0x22222222; */
+  /*   b[i].gpio        = CCW; */
+  /*   b[i].duty        = 0x33333333; */
+  /* } */
+
+  /* printf("Sending cmd...\n"); */
+  /* set_cmd_buf( b ); */
+
+  /* sleep(1); */
+
+
+
+  /* ////////////////// */
+
+  /* printf("Before STBY:\n"); */
+  /* get_data_buf( &before ); */
+  /* print_data_buf( before ); */
+
+  /* // Set to standby */
+  /* for( int i=0; i<PKTS_PER_CMD_BUFFER; i++ ) { */
+  /*   b[i].cycle_count = 0x11111111; */
+  /*   b[i].sample_num  = 0x22222222; */
+  /*   b[i].gpio        = STBY; */
+  /*   b[i].duty        = 0x33333333; */
+  /* } */
+
+  /* printf("Sending cmd...\n"); */
+  /* set_cmd_buf( b ); */
+
+  sleep(1);
+
+  //////////////
+
+  exit(0);
+}

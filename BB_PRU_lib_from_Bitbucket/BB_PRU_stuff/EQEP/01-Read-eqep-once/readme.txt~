@@ -1,0 +1,47 @@
+PRU reads the eqep once, C code retrieves & pritns it
+
+aug 23, 2016
+
+note: should load the following dev tree overlays beforehand:
+
+
+Important: eqep1 doesnt' conflict with the PRU:
+
+The PRU uses these pins:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# grep -i 0x /home/debian/exploringBB/chp13/overlay/EBB-PRU-Example.dts 
+               0x070 0x07  // P9_11 MODE7 | OUTPUT | GPIO pull-down
+               0x074 0x27  // P9_13 MODE7 | INPUT | GPIO pull-down
+               0x1a4 0x05  // P9_27 pr1_pru0_pru_r30_5, MODE5 | OUTPUT | PRU
+               0x19c 0x26  // P9_28 pr1_pru0_pru_r31_3, MODE6 | INPUT | PRU
+
+The EQEPs use these pins: EQEP1 seems safest:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# grep -i 0x /home/debian/BB_PRU_stuff/EQEP/beaglebot/encoders/dts/bone_eqep1.dts 
+                        0x0D8 0x22  /* P8_31 = GPIO0_10 = EQEP1_index, MODE2 */
+                        0x0DC 0x22  /* P8_32 = GPIO0_11 = EQEP1_strobe, MODE2 */
+                        0x0D4 0x32  /* P8_33 = GPIO0_9 = EQEP1B_in, MODE2 */
+                        0x0D0 0x32  /* P8_35 = GPIO0_8 = EQEP1A_in, MODE2 */
+
+
+The other eqeps do conflict with the PRU, I think, according to Derek's table. However, it doesnt'  look like they conflict here:
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# grep -i 0x /home/debian/BB_PRU_stuff/EQEP/beaglebot/encoders/dts/bone_eqep0.dts 
+                        0x1A8 0x21  /* P9_41 = GPIO3_20 = EQEP0_index, MODE1 */        
+                        0x1AC 0x21  /* P9_25 = GPIO3_21 = EQEP0_strobe, MODE1 */   
+                        0x1A0 0x31  /* P9_42 = GPIO3_18 = EQEP0A_in, MODE1 */       
+                        0x1A4 0x31  /* P9_27 = GPIO3_19 = EQEP0B_in, MODE1 */       
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# grep -i 0x /home/debian/BB_PRU_stuff/EQEP/beaglebot/encoders/dts/bone_eqep2.dts 
+                        0x0B8 0x23  /* P8_39 = GPIO2_12 = EQEP2_index, MODE3 */
+                        0x0BC 0x23  /* P8_40 = GPIO2_13 = EQEP2_strobe, MODE3 */
+                        0x0B0 0x33  /* P8_41 = GPIO2_10 = EQEP2A_in, MODE3 */
+                        0x0B4 0x33  /* P8_42 = GPIO2_11 = EQEP2B_in, MODE3 */
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# grep -i 0x /home/debian/BB_PRU_stuff/EQEP/beaglebot/encoders/dts/bone_eqep2b.dts 
+                               0x038 0x24  /* P8_16 = GPIO1_14 = EQEP2_index, MODE4 */
+                               0x03C 0x24  /* P8_15 = GPIO1_15 = EQEP2_strobe, MODE4 */
+                               0x030 0x34  /* P8_12 = GPIO1_12 = EQEP2A_in, MODE4 */
+                               0x034 0x34  /* P8_11 = GPIO1_13 = EQEP2B_in, MODE4 */

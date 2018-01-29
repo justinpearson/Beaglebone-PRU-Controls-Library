@@ -1,0 +1,245 @@
+Change the PWM duty cycle from the PRU.
+
+This program sets up channel B (of A,B) of the PWM subsystem 1 (of 0,1,2), which if load bone_pwm_P8_34 will be on pin P8_34. 
+
+See Page 2307 of SPRUH73N – October 2011 – Revised June 2016.
+
+
+
+PWM period = (TBPRD + 1) * T_TBCLK
+
+TBPRD = 600 in our case
+T_TBCLK is 100MHz? 
+
+"TBCLK
+Time-base clock.
+This is a prescaled version of the system clock (SYSCLKOUT) and is used by all submodules within the
+ePWM. This clock determines the rate at which time-base counter increments or decrements."
+
+We've set it up so TBCLK is not prescaled wrt SYSCLKOUT. 
+
+SYSCLKOUT is the normal CPU clock. 
+
+Um, I think this clock runs at 100MHz according to 
+
+#define SYSCLK 100000000
+
+from 
+
+// https://raw.githubusercontent.com/zedoul/rtdm-pwmss/master/rtdm-pwm/mf2044-pwm-drv.c
+
+So that means 100M ticks per second? So the PWM period is then
+
+601 ticks * ( 1 sec / 100M ticks ) = 6.01 us PWM period.
+
+And we set up channel B to 200, and so we should have 200/601 = 33% duty cycle.
+
+How to run:
+
+pasm -b pru-set-pwm.p   // makes .bin
+
+root@beaglebone:/home/debian/BB_PRU_stuff/PWM/03-PRU-sets-PWM-peripheral# /home/debian/prudebug-0.25/prudbg
+
+
+l 0 pru-set-pwm.bin   // loads .p into PRU instr memory
+
+g  // start code
+
+I see a sq wave w/ period of 6us and low time of 2.52us! surprising it's not 2us. Maybe it'll be better if we make the period longer.
+
+Hm, a 166kHz sq wave is a little cray. Let's shoot for 50kHz.
+
+So we'd need the 100MHz clock to reset at 50kHz...
+
+(100M cyc/sec) / (50 kResets / sec) = 2000 cyc / reset
+
+So that is what TBPRD should be set to.
+
+And let's shoot for a 20% duty cycle -- easy to see on the scope.
+
+20% of 2000 is 400, so that's what we should set CMPB to.
+
+We see 50kHz period as expected, but PWM signal is much smaller than 20% duty, and there are weird spikes.
+
+Set CMPB to 1000 (TBPRD still at 2000). Still see 50khz good, but duty should be 50%, and we're seeing 6.6us low of a 20us period => 67% duty cycle.
+
+CMPB   us high    duty
+1000   13.4        67%
+500    18.4        92%
+0      3.4         17%
+
+set TBPRD to 100000 and CMPB to 0, I see at 340us period (~3kHz) not 1kHz as expected, and 3.48us high-time (1% duty). What's going on here??
+
+Arg. Both CMPA and CMPB seems to affect the output of P8_34, which is supposed to be impossible. There must be some weird-ass mixing going on. 
+
+Also there are weird little 100ns blips in addition to the main sq wave when I do
+
+TBPRD: 100000 (1 kHz in theory)
+CMPA: 5000
+CMPB: 10000
+
+Causes:
+- hi
+- blip t=0
+- to low 50us later
+- to high 50us later
+- period: 344us
+
+
+Ah, typo, was having ch B change when CMPA did stuff. :(
+
+Decision: disable A, since it doesn't seem to be working. 
+
+Okay, now I've set up:
+
+TBPRD 1000000
+CMPA 0
+CMPB 10000 
+
+
+
+scope: 
+- period 344us
+- high for 50us
+
+
+PWM period = (TBPRD + 1) * T_TBCLK
+
+((1,000,000 + 1) ticks / period )* (1 sec / 100,000,000 ticks ) = 1/100 sec / period = 0.01 sec/period = 10ms/period
+
+we're seeing .344 ms insetad: 30x faster. Maybe we have sysclk wrong? 
+
+
+Q: Does period stay same, even if we change cmpb? 
+
+cmpb 0
+
+scope flat at 0 (good)
+
+cmpb 1
+
+period 344us
+
+10ns blip (not a real pulse per se)
+
+cmpb 10
+
+period 344us
+
+100ns blip
+
+cmpb 100
+
+period: 344us
+
+1us hi, more like a square wave, 3.3V good
+
+note: edges of sq wave wiggly, flat part at 3.3V, but up to 5V and -1.5V on up/down, for 250ns. 
+
+cmpb 1000
+
+period 344us
+
+hi for 10us
+
+cmpb 10000
+
+period 344us still 
+
+hi for 50us
+
+cmpb 100000
+
+period 344us
+
+hi for 50us (no change from cmpb=10000)
+
+redid 10000 cmpb to make sure. yup.
+
+tbprd from 100000 to 200000, period should double
+
+um, mostly at 3.3V with some crazy spikes.
+
+oh shit -- tbprd is a 2-byte register, so its vals can only go up to 65535! 
+
+We had it at 100000, which is 0x186A0, and only the lower 16 bits, 0x86A0, were used, which is 34464, which looks a lot like 344us, dammit!
+
+So if TBPRD < 65535, then the periods we can achieve are
+
+1 tick / period / (1e8 ticks / sec) = 1e-8 sec / period = 100kHz
+(65535 ticks / period) / (1e8 ticks / sec) .00065535 sec / period => 1526Hz. 
+
+If we want something slower, that's what the clock divider is for, I bet.
+
+So if we want 30kHz pWM period to drive our motor, then we need...
+
+TBPRD = 3333 
+
+And if we want a 10% duty, then 
+
+CMPB = 333
+
+Let's see.
+
+period: 33.2us (30kHz, YES)
+
+high for 3.3us (YES, thsi is 10% of the period.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Derek's table shows pin names
+
+ehrpwm0, 2a, 2b, 
+ehrpwm1_tripzone_in
+ehrpwm2_tripzone_in
+ehrpmw2B
+ehrpwm0_synco
+ehrpwm2A
+
+TRM: There are 3 PWM subsystems (PWMSS)
+
+They must be labeled 0, 1, 2.
+
+For some reason, each PWMSS can put a pwm signal on 2 pins, called A & B.
+
+Since
+
+# cat $SLOTS 
+
+shows
+
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+
+which Derek's table says is 
+
+ehrpwm1B
+
+that's the PWMSS we should be using.
+
+We're using PWMSS 1, channel B.
+
+TRM page 183 memory map: PWMSS1 starts at addr 0x48302000 to 0x483020FF. WIthin that, the ePWM1 registers run from 0x48302200 to 0x4830225F.
+
+In pwm-registers.hp, that aligns with 
+
+#define EPWM1_0_BASE 0x48302200
+
+Note that there is also
+
+#define EPWM1_1_BASE 0x48302260
+
+The 0/1 difference is maybe the A/B, but the TRM says that 0x48302260 to 0x48303FFF is reserved. Moreover I think the A/B are somehow both controlled by regs belonging to a single PWMSS, see the pic Page 2307 of SPRUH73N – October 2011 – Revised June 2016. So I think that name is misleading.. we shouldn't use any addrs at EPWM1_1_BASE 0x48302260. 
+
+Note: ehrpwm1A is 8_36, which we appear to not be using already (good).
+We can monitor this one too.

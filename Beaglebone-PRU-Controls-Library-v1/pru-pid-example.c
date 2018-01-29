@@ -1,0 +1,315 @@
+#include "jpp-pru-lib.h"
+#include "util-jpp.h"
+#include <math.h>
+#include <stdbool.h>
+
+#define DATA_FILE_NAME "data.txt"
+#define LOG_FILE_NAME  "runlog.txt"
+
+
+int main(int argc, char* argv[]) {
+
+  printf("Entering main().\n");
+  print_local_time(stdout);
+
+  start_pru();
+  send_single_voltage( 0 );
+
+  fprintf(stderr,"NOTE: Data will be written to:" DATA_FILE_NAME "\n");
+  fprintf(stderr,"NOTE: Log  will be written to:" LOG_FILE_NAME  "\n");
+
+  double Ts = .005;  // ms
+
+  const int MAX_TSTEPS = argc > 1 ? atoi(argv[1]) : 100 ;
+
+  /* double cputime          [MAX_TSTEPS]; */
+  /* double cputimediff      [MAX_TSTEPS]; */
+  /* unsigned int sns        [MAX_TSTEPS]; */
+
+  DataBuffer data_bufs[MAX_TSTEPS]; // Data from PRU
+  CommandBuffer cmd_bufs[MAX_TSTEPS]; // Commands to PRU
+  CommandBuffer cmd_bufs_from_pru[MAX_TSTEPS]; // Cmds echo'd back from PRU (helps debugging)
+
+   for( int i=0; i<MAX_TSTEPS; i++ ) {
+     init_data_buf( data_bufs[i] );
+     init_cmd_buf( cmd_bufs[i] );
+     init_cmd_buf( cmd_bufs_from_pru[i] );
+   }
+
+ /* double pru_time_sec = 0; */
+ /* double pru_time_sec_old = 0; */
+ /* unsigned int sample_num_last_solve = 0;  */
+
+   /////////////////////////////////////////////////////////////
+  // Main FOR loop (timesteps)
+
+
+  for(int tstep=0; tstep<MAX_TSTEPS; tstep++ ) {
+
+#if 1
+    if( tstep % 1 == 0 ) {
+      printf("\n======================\ntop of tstep=%d\n",tstep);
+    }
+#endif
+
+    /* toc(&(cputime[tstep]), &(cputimediff[tstep]) ); */
+
+    /* unsigned int cc_top = get_cycle_count(); */
+    /* fprintf(flog,"top. tstep: %u cputime: %lf cputimediff: %lf cc: %u\n",tstep, cputime[tstep], cputimediff[tstep], cc_top); */
+
+
+    get_data_cmd_bufs( &(data_bufs[tstep]), &(cmd_bufs_from_pru[tstep]) ); 
+
+    // Cycle count on the PRU of the most recent data packet:
+    // (Essentially the current time)
+    unsigned int cycle_count = data_bufs[tstep][PKTS_PER_DATA_BUFFER-1].cycle_count;
+    double t  = cycle_count/(double)PRU_TICKS_PER_SEC;
+    double angle = eqep_to_angle(data_bufs[tstep][PKTS_PER_DATA_BUFFER-1].eqep);
+    
+    
+    /* // and also give it a shorter name. copy into db */
+    /*     DataBuffer db; */
+
+    /* for( int k=0; k<PKTS_PER_DATA_BUFFER; k++ ) { */
+
+    /*   db[k].cycle_count = data_bufs[tstep][k].cycle_count; */
+    /*   db[k].sample_num = data_bufs[tstep][k].sample_num; */
+    /*   db[k].adc = data_bufs[tstep][k].adc; */
+    /*   db[k].eqep = data_bufs[tstep][k].eqep; */
+    /*   db[k].gpio = data_bufs[tstep][k].gpio; */
+    /*   db[k].duty = data_bufs[tstep][k].duty; */
+    /*   db[k].last_data_req = data_bufs[tstep][k].last_data_req; */
+    /*   db[k].last_cmd_sch = data_bufs[tstep][k].last_cmd_sch; */
+
+    /* } */
+
+    /* // Sample number that our Vm's should start at: */
+    /* unsigned int sn = db[PKTS_PER_DATA_BUFFER-1].sample_num; // get_sample_num(); */
+    /* unsigned int sample_num = sn; // db[PKTS_PER_DATA_BUFFER-1].sample_num+1; */
+    /* sns[tstep] = sn; */
+    /* int sample_num_diff = sample_num - sample_num_last_solve; */
+
+    /* fprintf(flog, "Time: %15.9lf diff: %15.9lf getsampnum: %5u sample_num_diff: %d",cputime[tstep], cputimediff[tstep], sns[tstep], sample_num_diff); */
+
+    /* if( sample_num_diff > HORIZON_T && tstep > 0) { */
+    /*   fprintf(flog, "\n========================\nArg, pre-empted longer than %u, bailing...\n",HORIZON_T); */
+    /*   break; */
+    /* } */
+
+
+    // Compute pru time, time vector (t), and reference (ref):
+
+  // Grab the current cycle time; that's pretty much the current time.
+  // CPU needs to know the current time for computing the reference.
+
+  /* pru_time_sec = (db[PKTS_PER_DATA_BUFFER-1].cycle_count)/(double)PRU_TICKS_PER_SEC; */
+  /* fprintf(flog,"pru time: %f (delta: %f)\n",pru_time_sec,pru_time_sec-pru_time_sec_old); */
+  /* pru_time_sec_old = pru_time_sec; */
+
+  //  pru_time_sec = Ts * tstep; // !!!!!!!!!!!!!!!!! hijacking pru time for testing.
+
+
+  /* double t[LEN_t] = {}; */
+  /* for(int j=0; j<LEN_t; j++ ) { */
+  /*   t[j] = pru_time_sec + Ts*(j-HORIZON_L); // units: sec */
+  /* } */
+
+  /* double ref[LEN_ref] = {}; */
+  /* double omegaRef= 2.0*PI; // 2.0*PI; // 0.01*PI; // units: rad/sec */
+
+  /* for(int j=0; j<LEN_ref; j++) { */
+  /*   ref[j] = 2.0 * PI * sign(sin(omegaRef*t[j+HORIZON_L+1])); // PI/2; // 0.0*PI/2.0*sign(sin(omegaRef*t[j+HORIZON_L+1]));  */
+  /*   // ref[j] = fake_refs[tstep][j]; // !!! */
+  /* } */
+
+
+
+    // Note: if des_angle - angle > 0, then angle needs to move up. 
+    // Our sys should have the property that pos voltage -> pos angle movement,
+    // therefore gain should be pos. If not, we may have a sign error somewhere.
+    /* double sim_time = cputime[tstep] - cputime[0]; */
+    /* double sim_time_diff = cputimediff[tstep]; */
+    double ref_freq = .5; // hz
+    double desired_angle = M_PI / 2.0 * sin(2.0 * M_PI * ref_freq * t) ; // PI/2.0; // PI / 2.0 * sin(2.0 * M_PI * ref_freq * sim_time) ;
+    /* double angle = eqep_to_angle( db[PKTS_PER_DATA_BUFFER-1].eqep ); */
+    double angle_error = (desired_angle - angle);
+    /* sum_angle_error += pid_Ki * angle_error * sim_time_diff; */
+    /* if( sum_angle_error > MAX_MOTOR_VOLTAGE ) {sum_angle_error = MAX_MOTOR_VOLTAGE;} */
+    /* if( sum_angle_error < -MAX_MOTOR_VOLTAGE ) {sum_angle_error = -MAX_MOTOR_VOLTAGE;} */
+    double pid_gain = 0.02;
+    double pid_voltage = pid_gain * angle_error; // + sum_angle_error;
+    if( pid_voltage > MAX_MOTOR_VOLTAGE ) {pid_voltage = MAX_MOTOR_VOLTAGE;}
+    if( pid_voltage < -MAX_MOTOR_VOLTAGE ) {pid_voltage = -MAX_MOTOR_VOLTAGE;}
+    /* printf("post-write. " \ */
+    /* 	   "tstep: %4d "\ */
+    /* 	   "time: %5.4lf "\ */
+    /* 	   "dtime: %5.4lf "\ */
+    /* 	   "gain: %5.4lf "\ */
+    /* 	   "freq: %5.4lf "\ */
+    /* 	   "des_ang: %5.4lf "\ */
+    /* 	   "ang: %5.4lf "\ */
+    /* 	   "err: %5.4lf "\ */
+    /* 	   "int_term: %5.4lf "\ */
+    /* 	   "volt: %5.4lf\n", \ */
+    /* 	   tstep, */
+    /* 	   sim_time, */
+    /* 	   sim_time_diff, */
+    /* 	   pid_gain, */
+    /* 	   ref_freq, */
+    /* 	   desired_angle, */
+    /* 	   angle, */
+    /* 	   angle_error, */
+    /* 	   sum_angle_error, */
+    /* 	   pid_voltage); */
+    
+    send_single_voltage( pid_voltage );
+
+
+
+/* #if 1 */
+/*     // put in a little sleep, just to let the scheduler run. */
+/*     usleep(0L); // microseconds */
+/* #else */
+
+    // sleep until the next sample time.
+    //       unsigned int cycle_count = get_cycle_count();
+    /* fprintf(flog,"\nbottom. cyc count: %u ",cycle_count); */
+
+    unsigned int cc_at_next_sample_time = (/* relying on int floor here*/ cycle_count/PRU_TICKS_PER_SAMPLE + 1) * PRU_TICKS_PER_SAMPLE;
+    
+    /* fprintf(flog,"cc at next samp time: %u ", cc_at_next_sample_time); */
+    unsigned int pru_ticks_to_sleep = cc_at_next_sample_time - cycle_count;
+    /* fprintf(flog,"ticks to sleep: %u ", pru_ticks_to_sleep); */
+    double usec_to_sleep = (double) pru_ticks_to_sleep * USEC_PER_SEC / PRU_TICKS_PER_SEC;
+    /* fprintf(flog, "Sleeping for %lf usec...\n",usec_to_sleep); */
+    usleep((unsigned long int) usec_to_sleep);
+/* #endif */
+
+
+  } // for loop -- timesteps
+
+
+  //////////////////////////////////////////
+
+  printf("Done with loop. Sleeping for 0.1 sec...\n");  
+  usleep(100000);
+
+
+  //////////////////////////////////////////
+  // Hardware cleanup
+  //////////////////////////////////////////
+
+  printf("Shutting down ...\n");
+  send_single_voltage( 0 );
+
+
+
+  /////////////////////////////////////
+  // Save data and runlog to files.
+  /////////////////////////////////////
+
+ printf("Writing data to file...\n");
+
+  // files to hold results
+  FILE* fp;
+  FILE* flog;
+
+    fp = fopen(DATA_FILE_NAME, "w");
+    flog = fopen(LOG_FILE_NAME,"w");
+
+    print_local_time(flog);
+
+    // Configure the data file and log file to be "fully buffered",
+    // meaning that they won't write to disk until explicitly told (or closed).
+    // https://www.chemie.fu-berlin.de/chemnet/use/info/libc/libc_7.html#SEC118
+    #define fp_buf_size 999999
+    #define flog_buf_size  999999
+    char fp_buf[fp_buf_size] = {};
+    char flog_buf[flog_buf_size] = {};
+    int retval = 0;
+    if( (retval = setvbuf( fp, fp_buf, _IOFBF, fp_buf_size )) != 0 ) {
+      printf("BAD: setvbuf returned %d\n",retval);
+    }
+    if( (retval = setvbuf( flog, flog_buf, _IOFBF, flog_buf_size )) != 0 ) {
+      printf("BAD: setvbuf returned %d\n",retval);
+    }
+
+
+    char stdout_buf[fp_buf_size] = {};
+    if((retval=setvbuf(stdout, stdout_buf, _IOFBF, fp_buf_size))!=0) {
+      printf("bad: setvbuf returned %d\n",retval);
+      return EXIT_FAILURE;
+    }
+
+    char stderr_buf[fp_buf_size] = {};
+    if((retval=setvbuf(stderr, stderr_buf, _IOFBF, fp_buf_size))!=0) {
+      printf("bad: setvbuf returned %d\n",retval);
+      return EXIT_FAILURE;
+    }
+
+
+
+////////////////////////////////  
+// Header row
+////////////////////////////////
+
+   // Print data buffer header
+   fprintf_data_buf_header( fp ); // databuffer
+   fprintf_cmd_buf_header_prefix( fp, "rx" ); // cmd_bufs_from_pru
+   fprintf_cmd_buf_header_prefix( fp, "tx" ); // cmd_bufs
+
+   fprintf(fp,"\n");
+
+////////////////////////////////
+// Data rows
+////////////////////////////////
+
+ for( int tstep=0; tstep<MAX_TSTEPS; tstep++ ) {
+
+   // Print data buffer:
+   fprintf_data_buf( fp, data_bufs[tstep] );
+    fprintf_cmd_buf(fp, cmd_bufs_from_pru[tstep] );
+    fprintf_cmd_buf(fp, cmd_bufs[tstep] );
+
+   fprintf(fp,"\n");
+
+ }
+
+
+printf("Done writing data file. Closing...\n");
+
+ fclose(fp);
+
+
+ printf("Goodbye!\n");
+
+
+    /////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+} // main(

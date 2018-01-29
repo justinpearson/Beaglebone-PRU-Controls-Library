@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "Building .p"
+
+pasm -b pwm-userspace.p
+
+echo "Building .c"
+
+gcc pwm-userspace.c -o pwm-userspace -lprussdrv
+
+echo "Running .c"
+
+./pwm-userspace
+

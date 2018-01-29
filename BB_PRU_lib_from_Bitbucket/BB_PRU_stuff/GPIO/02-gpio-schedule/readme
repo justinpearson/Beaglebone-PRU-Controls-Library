@@ -1,0 +1,19 @@
+This test is not done yet -- it needs to be debugged. It runs 7 "hits" of the Terminator 2 theme, instead of the full 10. 
+Probably a memory issue.
+
+In this test, a C program dictates specific actuation schedule for a few GPIO pins, of the form
+
+32-bit PRU cycle time, 32-bit GPIO states
+32-bit PRU cycle time, 32-bit GPIO states
+...
+
+In test ../01* I set up the DTO with these pins enabled:
+
+r30.t0: P9_31
+r30.t1: P9_29
+r30.t2: P9_30
+r30.t5: P9_27
+
+The .p code can set and clear bits like r30.t1.
+
+

@@ -1,0 +1,519 @@
+Here is a program for sampling several precisely-sampled ADC values. 
+The C program starts the PRU code, which continuously samples the ADC every 5ms to a length-64 buffer in PRU data ram. 
+When the C program sets the lowest bit in the PRU0 data ram address 0, the PRU copies the last 64 ADC samples to the PRU data ram at addresses 0x00000004 to 0x00000404. Each sample consists of:
+- which sample number. this is just an increasing number that the pru increments each time it samples the adc.
+- cycle count. this is the # of cycles the pru executed since the start of the program. Note that at 200MHz, the pru executes a million cycles in 5ms, so the cycle count is typically close to an integer multiple of a million
+- adc value: this is 0 - 4095, which maps to 0 - 1.8V. ADC channel 0. (P9_39).
+- a4a4a4a4. (reserved value) (will be the eqep position some day)
+
+
+Sample output:
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# !!
+./run
+I'm in:
+/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list
+Building .bin file cpu-reads-adc.p
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 144 word(s)
+
+Building .c file cpu-reads-adc.c to make cpu-reads-adc
+(Careful - does your .c load the correct .p / .bin?)
+Running cpu-reads-adc
+Hey, if you get a seg fault, make sure the EBB-PRU-Example device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo EBB-PRU-Example > /sys/devices/bone_capemgr.\
+9/slots
+executing bin file: ./cpu-reads-adc.bin
+Waiting for "Data ready" bit...
+Got it!
+i:0     #: 138  cycles: 138000010       ms: 690.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:1     #: 139  cycles: 139000013       ms: 695.000065  ADC: 2045       eyecatch: a4a4a4a4
+i:2     #: 140  cycles: 140000012       ms: 700.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:3     #: 141  cycles: 141000010       ms: 705.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:4     #: 142  cycles: 142000013       ms: 710.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:5     #: 143  cycles: 143000012       ms: 715.000060  ADC: 2046       eyecatch: a4a4a4a4
+i:6     #: 144  cycles: 144000010       ms: 720.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:7     #: 145  cycles: 145000013       ms: 725.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:8     #: 146  cycles: 146000012       ms: 730.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:9     #: 147  cycles: 147000010       ms: 735.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:10    #: 148  cycles: 148000013       ms: 740.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:11    #: 149  cycles: 149000012       ms: 745.000060  ADC: 2048       eyecatch: a4a4a4a4
+i:12    #: 150  cycles: 150000010       ms: 750.000050  ADC: 2046       eyecatch: a4a4a4a4
+i:13    #: 151  cycles: 151000013       ms: 755.000065  ADC: 2045       eyecatch: a4a4a4a4
+i:14    #: 152  cycles: 152000012       ms: 760.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:15    #: 153  cycles: 153000010       ms: 765.000050  ADC: 2048       eyecatch: a4a4a4a4
+i:16    #: 154  cycles: 154000013       ms: 770.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:17    #: 155  cycles: 155000012       ms: 775.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:18    #: 156  cycles: 156000010       ms: 780.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:19    #: 157  cycles: 157000013       ms: 785.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:20    #: 158  cycles: 158000012       ms: 790.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:21    #: 159  cycles: 159000010       ms: 795.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:22    #: 160  cycles: 160000013       ms: 800.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:23    #: 161  cycles: 161000012       ms: 805.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:24    #: 162  cycles: 162000010       ms: 810.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:25    #: 163  cycles: 163000013       ms: 815.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:26    #: 164  cycles: 164000012       ms: 820.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:27    #: 165  cycles: 165000010       ms: 825.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:28    #: 166  cycles: 166000013       ms: 830.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:29    #: 167  cycles: 167000012       ms: 835.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:30    #: 168  cycles: 168000010       ms: 840.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:31    #: 169  cycles: 169000013       ms: 845.000065  ADC: 2045       eyecatch: a4a4a4a4
+i:32    #: 170  cycles: 170000012       ms: 850.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:33    #: 171  cycles: 171000010       ms: 855.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:34    #: 172  cycles: 172000013       ms: 860.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:35    #: 173  cycles: 173000012       ms: 865.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:36    #: 174  cycles: 174000010       ms: 870.000050  ADC: 2043       eyecatch: a4a4a4a4
+i:37    #: 175  cycles: 175000013       ms: 875.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:38    #: 176  cycles: 176000012       ms: 880.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:39    #: 177  cycles: 177000010       ms: 885.000050  ADC: 2043       eyecatch: a4a4a4a4
+i:40    #: 178  cycles: 178000013       ms: 890.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:41    #: 179  cycles: 179000012       ms: 895.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:42    #: 180  cycles: 180000010       ms: 900.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:43    #: 181  cycles: 181000013       ms: 905.000065  ADC: 2048       eyecatch: a4a4a4a4
+i:44    #: 182  cycles: 182000012       ms: 910.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:45    #: 183  cycles: 183000010       ms: 915.000050  ADC: 2046       eyecatch: a4a4a4a4
+i:46    #: 184  cycles: 184000013       ms: 920.000065  ADC: 2046       eyecatch: a4a4a4a4
+i:47    #: 185  cycles: 185000012       ms: 925.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:48    #: 186  cycles: 186000010       ms: 930.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:49    #: 187  cycles: 187000013       ms: 935.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:50    #: 188  cycles: 188000012       ms: 940.000060  ADC: 2043       eyecatch: a4a4a4a4
+i:51    #: 189  cycles: 189000010       ms: 945.000050  ADC: 2047       eyecatch: a4a4a4a4
+i:52    #: 190  cycles: 190000013       ms: 950.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:53    #: 191  cycles: 191000012       ms: 955.000060  ADC: 2045       eyecatch: a4a4a4a4
+i:54    #: 192  cycles: 192000010       ms: 960.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:55    #: 193  cycles: 193000011       ms: 965.000055  ADC: 2044       eyecatch: a4a4a4a4
+i:56    #: 194  cycles: 194000010       ms: 970.000050  ADC: 2044       eyecatch: a4a4a4a4
+i:57    #: 195  cycles: 195000013       ms: 975.000065  ADC: 2044       eyecatch: a4a4a4a4
+i:58    #: 196  cycles: 196000012       ms: 980.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:59    #: 197  cycles: 197000010       ms: 985.000050  ADC: 2045       eyecatch: a4a4a4a4
+i:60    #: 198  cycles: 198000013       ms: 990.000065  ADC: 2046       eyecatch: a4a4a4a4
+i:61    #: 199  cycles: 199000012       ms: 995.000060  ADC: 2044       eyecatch: a4a4a4a4
+i:62    #: 200  cycles: 200000010       ms: 1000.000050 ADC: 2044       eyecatch: a4a4a4a4
+i:63    #: 201  cycles: 201000013       ms: 1005.000065 ADC: 2044       eyecatch: a4a4a4a4
+Waiting for "Data ready" bit...
+Got it!
+i:0     #: 348  cycles: 348000010       ms: 1740.000050 ADC: 2046       eyecatch: a4a4a4a4
+i:1     #: 349  cycles: 349000013       ms: 1745.000065 ADC: 2044       eyecatch: a4a4a4a4
+i:2     #: 350  cycles: 350000012       ms: 1750.000060 ADC: 2044       eyecatch: a4a4a4a4
+i:3     #: 351  cycles: 351000010       ms: 1755.000050 ADC: 2046       eyecatch: a4a4a4a4
+i:4     #: 352  cycles: 352000013       ms: 1760.000065 ADC: 2044       eyecatch: a4a4a4a4
+...
+
+
+You can see that the CPU is missing samples between its two queries, because it waited for a second between them. If the CPU pauses less, like 20ms between asking, the two 64-sample buffers will overlap.
+
+
+
+//////////////////////////////////////////////////////////////////////
+
+
+
+This was a huge pain to debug, but the pru debugger and gdb helped a lot. 
+
+See how-to-debug-the-beaglebone-pru-assembly-code.ogv here:
+
+2016-08-26 16:07:55 [roseline@roseline-controller-2 ~] 
+$ ls -lstrah | tail
+4.0K -rwxr-xr-x  1 roseline roseline  736 Aug 26 08:32 backup-BB
+4.0K drwx------ 29 roseline roseline 4.0K Aug 26 09:05 .config
+4.0K drwxrwxr-x  4 roseline roseline 4.0K Aug 26 09:11 BB_Backups
+4.0K drwxr-xr-x  5 roseline roseline 4.0K Aug 26 10:03 Downloads
+2.1M -rw-rw-r--  1 roseline roseline 2.1M Aug 26 10:58 out-5.ogv
+800K -rw-rw-r--  1 roseline roseline 798K Aug 26 11:11 out-6.ogv
+133M -rw-rw-r--  1 roseline roseline 133M Aug 26 13:33 how-to-debug-the-beaglebone-pru-assembly-code.ogv
+4.0K -rw-rw-r--  1 roseline roseline 1.3K Aug 26 13:33 gtk-recordMyDesktop-crash.log
+4.0K drwxr-xr-x 58 roseline roseline 4.0K Aug 26 14:08 .
+ 36K -rw-------  1 roseline roseline  36K Aug 26 14:32 .bash_history
+2016-08-26 16:07:58 [roseline@roseline-controller-2 ~] 
+
+
+
+////////////////////////////////////////////
+// Warning about memory addresses
+
+
+
+
+In the old days I thought:
+
+	// note that addrs have units of 32-bits, not bytes.
+	// ie, diff btwn addr 0x00000000 and 0x00000001 is 4 bytes, not 1 byte
+	// note: confusingingly, in cmds like SBBO that take an offset, the
+	// offset is given in bytes.
+	// eg
+	// MOV R1, 0xDEADBEEF // some value
+	// MOV R2, 0x00000100 // start of some buffer
+	// SBBO R1, R2, 12, 4 
+	// now 0xDEADBEEF is 12 bytes (3 words = 3 ints) past addr 0x100,
+	// at addr 0x103.
+
+THis is wrong.
+
+Fucking fuck, it turns out that pru data ram addresses have units of bytes,
+but the pru debugger labels the data memory in units of words (4-bytes). This leads to confusion!
+
+So if you do a cmd like "move the number 0xdeadbeef to address 0x101" like this assembly cmd
+
+mov r1, 0xdeadbeef
+mov r2, 0x00000101  // pru data ram addr 0x101
+sbbo r1, r2, 0, 4
+
+it shows up in the pru debugger in address 0x40, with a weird offset:
+
+PRU0> d 0 1000
+d 0 1000
+Absolute addr = 0x0000, offset = 0x0000, Len = 1000
+[0x0000] 0x00000000 0x11111111 0x11111111 0x11111111
+[0x0004] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0008] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x000c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0010] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0014] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0018] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x001c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0020] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0024] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0028] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x002c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0030] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0034] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0038] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x003c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0040] 0xadbeef11 0x111111de 0x11111111 0x11111111  <--- here is our value.
+[0x0044] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0048] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x004c] 0x11111111 0x11111111 0x11111111 0x11111111
+
+when the pru dbgger says 0x0040, that's in 4-byte chunks, so it's actually 0x40 * 4 = 0x100 bytes from data ram addr 0. 
+
+Moreover, we've moved the number "1" into address 0x101 (bytes), and since the debugger shows us u32's with <high-order bits> on the left and <low-order bits> on the right, the line
+
+[0x0040] 0xadbeef11 0x111111de 0x11111111 0x11111111  <--- here is our value.
+
+actually means that the number 0xdeadbeef has been inserted 0x101 bytes from the start, as desired.
+
+
+	
+However, in our C code, since our poitner to the data ram is an unsigned int (4-bytes),
+incrementing that pointer will move it forward by 4 bytes. Jesus.
+
+
+For example, here we are in the PRU debugger, about to write R21 (0x1) into addr R17 (0x101) (where 0x0 is pru data ram base), offset by R8 (0), and writing 4 bytes.
+
+PRU0> gss
+gss
+Running (will run until a breakpoint is hit or a key is pressed)....
+
+Register info for PRU0
+    Control register: 0x00000109
+      Reset PC:0x0000  STOPPED, SINGLE_STEP, COUNTER_ENABLED, NOT_SLEEPING, PROC_DISABLED
+
+    Program counter: 0x005b
+      Current instruction: SBBO R21, R17, R8, 4
+
+    R00: 0x0000000a    R08: 0x00000000    R16: 0xc03baf73    R24: 0xcb0edc25
+    R01: 0x00000800    R09: 0x00000000    R17: 0x00000101    R25: 0xa13ce8ee
+    R02: 0x00000fff    R10: 0x00000002    R18: 0x00000001    R26: 0xc37deeba
+    R03: 0x00000040    R11: 0x00000000    R19: 0x00022000    R27: 0xbfbc0d6f
+    R04: 0xfffffff8    R12: 0x0000000a    R20: 0x0002200c    R28: 0x61b8bd59
+    R05: 0x000f4240    R13: 0x00000002    R21: 0x00000001    R29: 0xd1a23a79
+    R06: 0x44e0d000    R14: 0x00000800    R22: 0xfe14b171    R30: 0x7fa3b06a
+    R07: 0x44e0d100    R15: 0x0000000a    R23: 0x3506ebed    R31: 0x00000000
+
+
+Before we execute that line, here's what the relevant part of hte data ram looks like. As you can see, the PRU debugger considers address 0x0004 to be 4 32-bit words after address 0x0000. So it looks like the pru debugger 
+
+PRU0> d 0 1000
+d 0 1000
+Absolute addr = 0x0000, offset = 0x0000, Len = 1000
+[0x0000] 0x00000000 0x11111111 0x11111111 0x11111111
+[0x0004] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0008] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x000c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0010] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0014] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0018] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x001c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0020] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0024] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0028] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x002c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0030] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0034] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0038] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x003c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0040] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0044] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0048] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x004c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0050] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0054] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0058] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x005c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0060] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0064] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0068] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x006c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0070] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0074] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0078] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x007c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0080] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0084] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0088] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x008c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0090] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0094] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0098] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x009c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00a0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00a4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00a8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00ac] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00b0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00b4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00b8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00bc] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00c0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00c4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00c8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00cc] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00d0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00d4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00d8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00dc] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00e0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00e4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00e8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00ec] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00f0] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00f4] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00f8] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x00fc] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0100] 0x11111111 0x22222222 0x22222222 0x22222222
+[0x0104] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0108] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x010c] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0110] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0114] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0118] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x011c] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0120] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0124] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x0128] 0x22222222 0x22222222 0x22222222 0x22222222
+[0x012c] 0x22222222 0x22222222 0x22222222 0x22222222
+
+
+After:
+
+PRU0> d 0 1000
+d 0 1000
+Absolute addr = 0x0000, offset = 0x0000, Len = 1000
+[0x0000] 0x00000000 0x11111111 0x11111111 0x11111111
+[0x0004] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0008] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x000c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0010] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0014] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0018] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x001c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0020] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0024] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0028] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x002c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0030] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0034] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0038] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x003c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0040] 0x00000111 0x11111100 0x11111111 0x11111111
+[0x0044] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0048] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x004c] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0050] 0x11111111 0x11111111 0x11111111 0x11111111
+[0x0054] 0x11111111 0x11111111 0x11111111 0x11111111
+
+You can see that address `[0x0040]` has some weird stuff going on.
+
+What's happened is that we're seeing an endian problem as well as a pru-debugger-labels-ram-weirdly problem.
+
+You can use devmem to see what's actually in the ram:
+
+The PRU0 data ram offset is 0x4a300000, so if we mistakenly trust the PRU, we won't see our previous 0x1 value:
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300040
+/dev/mem opened.
+Memory mapped at address 0xb6f2a000.
+Value at address 0x4A300040 (0xb6f2a040): 0x11111111
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300041
+/dev/mem opened.
+Memory mapped at address 0xb6fd6000.
+Value at address 0x4A300041 (0xb6fd6041): 0x11111111
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300042
+/dev/mem opened.
+Memory mapped at address 0xb6f6a000.
+Value at address 0x4A300042 (0xb6f6a042): 0x11111111
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300043
+/dev/mem opened.
+Memory mapped at address 0xb6f87000.
+Value at address 0x4A300043 (0xb6f87043): 0x11111111
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300044
+/dev/mem opened.
+Memory mapped at address 0xb6fd4000.
+Value at address 0x4A300044 (0xb6fd4044): 0x11111111
+
+
+
+However, if we look at the actual bytes... You can see that it reads in units of bytes. The "1" slowly creeps across as we move our 32-bit window over 1 byte at a time.
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300100
+/dev/mem opened.
+Memory mapped at address 0xb6f81000.
+Value at address 0x4A300100 (0xb6f81100): 0x111
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300101
+/dev/mem opened.
+Memory mapped at address 0xb6f69000.
+Value at address 0x4A300101 (0xb6f69101): 0x1
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300102
+/dev/mem opened.
+Memory mapped at address 0xb6f59000.
+Value at address 0x4A300102 (0xb6f59102): 0x11000000
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300103
+/dev/mem opened.
+Memory mapped at address 0xb6f08000.
+Value at address 0x4A300103 (0xb6f08103): 0x11110000
+root@beaglebone:/home/debian/BB_PRU_stuff/ADC/06-CPU-gets-ADC-sample-list# /home/debian/devmem/devmem2 0x4a300104
+/dev/mem opened.
+Memory mapped at address 0xb6fa5000.
+Value at address 0x4A300104 (0xb6fa5104): 0x11111100
+
+
+Here is how to make it work:
+
+
+PRU0> r
+r
+Register info for PRU0
+    Control register: 0x00000109
+      Reset PC:0x0000  STOPPED, SINGLE_STEP, COUNTER_ENABLED, NOT_SLEEPING, PROC_DISABLED
+
+    Program counter: 0x005b
+      Current instruction: SBBO R21, R17, R8, 4
+
+    R00: 0x0000000a    R08: 0x00000000    R16: 0xc03baf73    R24: 0xcb0edc25
+    R01: 0x000007fc    R09: 0x00000000    R17: 0x00000404    R25: 0xa13ce8ee
+    R02: 0x00000fff    R10: 0x00000002    R18: 0x00000004    R26: 0xc37deeba
+    R03: 0x00000040    R11: 0x00000000    R19: 0x00022000    R27: 0xbfbc0d6f
+    R04: 0xfe73447d    R12: 0x0000000a    R20: 0x0002200c    R28: 0x61b8bd59
+    R05: 0x000f4240    R13: 0x00000002    R21: 0x00000001    R29: 0xd1a23a79
+    R06: 0x44e0d000    R14: 0x000007fc    R22: 0xfe14b171    R30: 0x7fa3b06a
+    R07: 0x44e0d100    R15: 0x0000000a    R23: 0x3506ebed    R31: 0x00000000
+
+PRU0> ss
+ss
+Register info for PRU0
+    Control register: 0x00000109
+      Reset PC:0x0000  STOPPED, SINGLE_STEP, COUNTER_ENABLED, NOT_SLEEPING, PROC_DISABLED
+
+    Program counter: 0x005c
+      Current instruction: ADD R8, R8, 0x04
+
+    R00: 0x0000000a    R08: 0x00000000    R16: 0xc03baf73    R24: 0xcb0edc25
+    R01: 0x000007fc    R09: 0x00000000    R17: 0x00000404    R25: 0xa13ce8ee
+    R02: 0x00000fff    R10: 0x00000002    R18: 0x00000004    R26: 0xc37deeba
+    R03: 0x00000040    R11: 0x00000000    R19: 0x00022000    R27: 0xbfbc0d6f
+    R04: 0xfe73447d    R12: 0x0000000a    R20: 0x0002200c    R28: 0x61b8bd59
+    R05: 0x000f4240    R13: 0x00000002    R21: 0x00000001    R29: 0xd1a23a79
+    R06: 0x44e0d000    R14: 0x000007fc    R22: 0xfe14b171    R30: 0x7fa3b06a
+    R07: 0x44e0d100    R15: 0x0000000a    R23: 0x3506ebed    R31: 0x00000000
+
+PRU0> d 0 1000
+d 0 1000
+Absolute addr = 0x0000, offset = 0x0000, Len = 1000
+[0x0000] 0x00000000 0x33333333 0x33333333 0x33333333 
+[0x0004] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0008] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x000c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0010] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0014] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0018] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x001c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0020] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0024] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0028] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x002c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0030] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0034] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0038] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x003c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0040] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0044] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0048] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x004c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0050] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0054] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0058] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x005c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0060] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0064] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0068] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x006c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0070] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0074] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0078] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x007c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0080] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0084] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0088] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x008c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0090] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0094] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0098] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x009c] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00a0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00a4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00a8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00ac] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00b0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00b4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00b8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00bc] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00c0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00c4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00c8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00cc] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00d0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00d4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00d8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00dc] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00e0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00e4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00e8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00ec] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00f0] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00f4] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00f8] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x00fc] 0x33333333 0x33333333 0x33333333 0x33333333 
+[0x0100] 0x33333333 0x00000001 0x77777777 0x77777777  <-- worked!! 
+[0x0104] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0108] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x010c] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0110] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0114] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0118] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x011c] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0120] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0124] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0128] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x012c] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0130] 0x77777777 0x77777777 0x77777777 0x77777777 
+[0x0134] 0x77777777 0x77777777 0x77777777 0x77777777 

@@ -1,0 +1,12 @@
+#include <unistd.h> // for unsigned int sleep(unsigned int seconds);
+#include "jpp-pru-lib.h"
+
+void main() {
+
+
+const int NUM_BUFS = 10;
+DataBuffer data_bufs[NUM_BUFS];
+CommandBuffer cmd_bufs[NUM_BUFS];
+
+
+}

@@ -1,2 +1,5 @@
 # Beaglebone-PRU-Controls-Library
-A library for using the Beaglebone's Programmable Realtime Unit (PRU) in a buffered control system
+
+A library for implementing time-aware controllers on the Beaglebone using its Programmable Real-Time Unit (PRU).
+
+This is kind of a data dump from two other projects. It's not very well-documented -- sorry.

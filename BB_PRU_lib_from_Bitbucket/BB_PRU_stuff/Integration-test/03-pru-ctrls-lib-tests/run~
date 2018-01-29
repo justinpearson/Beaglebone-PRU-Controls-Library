@@ -1,0 +1,79 @@
+#!/bin/bash
+
+set -e
+
+echo "I'm in: "
+echo `pwd`
+
+#echo " building jadcpwmeqep.o"
+#gcc -std=gnu99 -g -Wall -Werror -pthread -lstdc++ -std=gnu99  -c jadcpwmeqep.c
+
+
+# .p: PRU code
+# .c: PRU lib implementation
+
+
+
+name=jpp-pru-lib
+pfile=$name.p
+binfile=$name.bin
+clibfile=$name.c
+olibfile=$name.o
+
+#testname=test0-get-data
+#testname=test1-get-data-fast
+#testname=test2-gpio-tests
+#testname=test3-drive-motor
+#testname=test4-sysid
+testname=test5-calibrate-sensors
+ctestfile=$testname.c
+exefile=$testname
+
+echo "Resetting eqep..."
+
+echo 0 > /sys/devices/ocp.3/48302000.epwmss/48302180.eqep/position 
+
+
+echo "=========================="
+echo "building PRU library..."
+
+echo "Compiling .c file $clibfile into .o file $olibfile"
+gcc -Wall -std=gnu99 -g -Wall -Werror -pthread -lstdc++ -std=gnu99 -c $clibfile
+
+echo "Using pasm to assemble .p file $pfile into .bin file $binfile..."
+
+pasm -b $pfile
+
+echo "Building test .c file $ctestfile to make $exefile"
+
+# echo "(Careful - does your .c load the correct .p / .bin?)"
+
+# use -std=c99 to permit for( int i=0
+# without this you get: ‘for’ loop initial declarations are only allowed in C99 mode
+# Or: -std=gnu99 and usleep. gnu99 and nanosleep no work.
+
+# -lm: needed for fmod in angle wrap alg
+#        http://stackoverflow.com/questions/11336477/gcc-will-not-properly-include-math-h
+
+# -lprussdrv : PRU livs
+# -lrt: clock_gettime( CLOCK_REALTIME , )
+# -lpthread : threading stuff? prob not needed.
+
+gcc -Wall -std=gnu99 -lm -g $ctestfile $olibfile -o $exefile -lprussdrv -lrt
+
+
+
+
+
+echo "Running $exefile"
+
+#./$exename
+
+echo "... at realtime priority:"
+chrt 20 ./$exefile
+
+
+echo "Making nicer data file..."
+
+cat sysid-data.txt | cut -d" " -f2- | sort -n | uniq > sysid-data-nice.txt
+

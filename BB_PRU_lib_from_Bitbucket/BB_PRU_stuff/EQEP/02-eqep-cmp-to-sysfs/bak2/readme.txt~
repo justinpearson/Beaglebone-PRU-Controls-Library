@@ -1,0 +1,204 @@
+pru reads eqep, compares to sysfs entry for eqep.
+
+The concern here is that I use nathaniel lewis's C code to init the eqep registers, then I use the PRU to read the reg. I'm not sure if these two systems play nice together. So we'll compare what the NL's sysfs driver says with what teh PRU says.
+
+NOTE: They seem to match, but they both stop updating when the cycle counter runs out.
+
+NOTE: There seems to be a mismatch between where the eqep sysfs is stored. In the old days (on Zulu BB) it was in 
+
+"/sys/devices/platform/ocp/48304000.epwmss/48304180.eqep"
+
+but my stock BB (Victor) doesn't have a "platform" directory. It's in
+
+"/sys/devices/ocp.3/48302000.epwmss/48302180.eqep"
+
+as specificed in NL's page
+
+https://github.com/Teknoman117/beaglebot/tree/master/encoders
+
+
+
+Conclusion:
+- don't expect eqep to work after cycle counter runs out
+- must use C code to init eqep registers
+
+
+
+
+Eaxmple output:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/02-eqep-cmp-to-sysfs# ./run
+Building .bin file eqep-hello-world.p
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 30 word(s)
+
+Building .c file eqep-hello-world.c to make eqep-hello-world
+(Careful - does your .c load the correct .p / .bin?)
+Running eqep-hello-world
+Hey, if you get a seg fault, make sure the EBB-PRU-Example device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo EBB-PRU-Example > /sys/devices/bone_capemgr.9/slots
+Note: I'm using the qQEP sysfs entry:/sys/devices/ocp.3/48302000.epwmss/48302180.eqep, so make sure that exists!!
+Calling constructor...
+Setting period...
+Starting loop...
+executing bin file: ./eqep-hello-world.bin
+Waiting...
+Iter 0/150, val0: 3		 val1: 199998365	 sysfs:3
+Iter 1/150, val0: 3		 val1: 240234713	 sysfs:3
+Iter 2/150, val0: 3		 val1: 280430945	 sysfs:3
+Iter 3/150, val0: 3		 val1: 320627177	 sysfs:3
+Iter 4/150, val0: 3		 val1: 360803351	 sysfs:3
+Iter 5/150, val0: 3		 val1: 401019641	 sysfs:3
+Iter 6/150, val0: 6		 val1: 441215875	 sysfs:6
+Iter 7/150, val0: 6		 val1: 481412107	 sysfs:6
+Iter 8/150, val0: 6		 val1: 521588281	 sysfs:6
+Iter 9/150, val0: 6		 val1: 561764455	 sysfs:6
+Iter 10/150, val0: 6		 val1: 601940629	 sysfs:6
+Iter 11/150, val0: 6		 val1: 642116805	 sysfs:6
+Iter 12/150, val0: 6		 val1: 682313041	 sysfs:6
+Iter 13/150, val0: 6		 val1: 722489215	 sysfs:4
+Iter 14/150, val0: 9		 val1: 762685447	 sysfs:9
+Iter 15/150, val0: 12		 val1: 802901737	 sysfs:12
+Iter 16/150, val0: 12		 val1: 843097975	 sysfs:12
+Iter 17/150, val0: 15		 val1: 883314267	 sysfs:15
+Iter 18/150, val0: 18		 val1: 923490441	 sysfs:18
+Iter 19/150, val0: 18		 val1: 963666615	 sysfs:18
+Iter 20/150, val0: 18		 val1: 1003842791	 sysfs:18
+Iter 21/150, val0: 18		 val1: 1044018965	 sysfs:18
+Iter 22/150, val0: 18		 val1: 1084195139	 sysfs:18
+Iter 23/150, val0: 18		 val1: 1124391371	 sysfs:18
+Iter 24/150, val0: 21		 val1: 1164587603	 sysfs:21
+Iter 25/150, val0: 21		 val1: 1204783835	 sysfs:21
+Iter 26/150, val0: 21		 val1: 1244980069	 sysfs:21
+Iter 27/150, val0: 21		 val1: 1285196359	 sysfs:21
+Iter 28/150, val0: 21		 val1: 1325372533	 sysfs:21
+Iter 29/150, val0: 21		 val1: 1365548709	 sysfs:21
+Iter 30/150, val0: 19		 val1: 1405724883	 sysfs:21
+Iter 31/150, val0: 21		 val1: 1445901057	 sysfs:21
+Iter 32/150, val0: 21		 val1: 1486077233	 sysfs:21
+Iter 33/150, val0: 21		 val1: 1526273465	 sysfs:21
+Iter 34/150, val0: 24		 val1: 1566469699	 sysfs:24
+Iter 35/150, val0: 24		 val1: 1606665931	 sysfs:24
+Iter 36/150, val0: 24		 val1: 1646862163	 sysfs:24
+Iter 37/150, val0: 21		 val1: 1687078453	 sysfs:20
+Iter 38/150, val0: 12		 val1: 1727274685	 sysfs:12
+Iter 39/150, val0: 7		 val1: 1767450859	 sysfs:6
+Iter 40/150, val0: 5		 val1: 1807627033	 sysfs:4
+Iter 41/150, val0: 3		 val1: 1847803207	 sysfs:3
+Iter 42/150, val0: 5		 val1: 1887999441	 sysfs:5
+Iter 43/150, val0: 190		 val1: 1928175615	 sysfs:191
+Iter 44/150, val0: 421		 val1: 1968371847	 sysfs:420
+Iter 45/150, val0: 452		 val1: 2008568079	 sysfs:451
+Iter 46/150, val0: 452		 val1: 2048744255	 sysfs:452
+Iter 47/150, val0: 518		 val1: 2088960545	 sysfs:519
+Iter 48/150, val0: 822		 val1: 2129156777	 sysfs:824
+Iter 49/150, val0: 908		 val1: 2169332951	 sysfs:908
+Iter 50/150, val0: 907		 val1: 2209509125	 sysfs:907
+Iter 51/150, val0: 907		 val1: 2249685299	 sysfs:907
+Iter 52/150, val0: 1107		 val1: 2289861473	 sysfs:1107
+Iter 53/150, val0: 1384		 val1: 2330037647	 sysfs:1383
+Iter 54/150, val0: 1397		 val1: 2370233879	 sysfs:1397
+Iter 55/150, val0: 1403		 val1: 2410430111	 sysfs:1403
+Iter 56/150, val0: 1406		 val1: 2450626345	 sysfs:1406
+Iter 57/150, val0: 1402		 val1: 2490842635	 sysfs:1403
+Iter 58/150, val0: 1391		 val1: 2531038867	 sysfs:1392
+Iter 59/150, val0: 1393		 val1: 2571215043	 sysfs:1393
+Iter 60/150, val0: 1402		 val1: 2611391217	 sysfs:1402
+Iter 61/150, val0: 1405		 val1: 2651587449	 sysfs:1405
+Iter 62/150, val0: 1399		 val1: 2691763625	 sysfs:1398
+Iter 63/150, val0: 1378		 val1: 2731939799	 sysfs:1375
+Iter 64/150, val0: 1432		 val1: 2772136031	 sysfs:1432
+Iter 65/150, val0: 1432		 val1: 2812312205	 sysfs:1432
+Iter 66/150, val0: 1431		 val1: 2852508437	 sysfs:1431
+Iter 67/150, val0: 1441		 val1: 2892724729	 sysfs:1441
+Iter 68/150, val0: 1445		 val1: 2932920963	 sysfs:1445
+Iter 69/150, val0: 1445		 val1: 2973137253	 sysfs:1445
+Iter 70/150, val0: 1445		 val1: 3013313427	 sysfs:1445
+Iter 71/150, val0: 1445		 val1: 3053489603	 sysfs:1445
+Iter 72/150, val0: 1445		 val1: 3093665777	 sysfs:1445
+Iter 73/150, val0: 1445		 val1: 3133841951	 sysfs:1445
+Iter 74/150, val0: 1446		 val1: 3174038183	 sysfs:1446
+Iter 75/150, val0: 1442		 val1: 3214214357	 sysfs:1442
+Iter 76/150, val0: 1437		 val1: 3254430647	 sysfs:1436
+Iter 77/150, val0: 1426		 val1: 3294606821	 sysfs:1424
+Iter 78/150, val0: 1422		 val1: 3334823111	 sysfs:1422
+Iter 79/150, val0: 1422		 val1: 3375019343	 sysfs:1422
+Iter 80/150, val0: 1422		 val1: 3415215575	 sysfs:1422
+Iter 81/150, val0: 1423		 val1: 3455391749	 sysfs:1423
+Iter 82/150, val0: 1423		 val1: 3495587981	 sysfs:1423
+Iter 83/150, val0: 1423		 val1: 3535764157	 sysfs:1423
+Iter 84/150, val0: 1423		 val1: 3575940331	 sysfs:1423
+Iter 85/150, val0: 1423		 val1: 3616136563	 sysfs:1423
+Iter 86/150, val0: 1423		 val1: 3656352853	 sysfs:1423
+Iter 87/150, val0: 1423		 val1: 3696549085	 sysfs:1423
+Iter 88/150, val0: 1423		 val1: 3736745319	 sysfs:1423
+Iter 89/150, val0: 1420		 val1: 3776941551	 sysfs:1420
+Iter 90/150, val0: 1408		 val1: 3817137783	 sysfs:1408
+Iter 91/150, val0: 1404		 val1: 3857354073	 sysfs:1404
+Iter 92/150, val0: 1421		 val1: 3897550305	 sysfs:1421
+Iter 93/150, val0: 1421		 val1: 3937746537	 sysfs:1421
+Iter 94/150, val0: 1423		 val1: 3977922711	 sysfs:1423
+Iter 95/150, val0: 1404		 val1: 4018098885	 sysfs:1405
+Iter 96/150, val0: 1459		 val1: 4058275059	 sysfs:1462
+Iter 97/150, val0: 1471		 val1: 4098471291	 sysfs:1471
+Iter 98/150, val0: 1474		 val1: 4138647467	 sysfs:1474
+Iter 99/150, val0: 1471		 val1: 4178843699	 sysfs:1471
+Iter 100/150, val0: 1470		 val1: 4219039931	 sysfs:1470
+Iter 101/150, val0: 1460		 val1: 4259256221	 sysfs:1461
+Iter 102/150, val0: 1446		 val1: 4294967295	 sysfs:1447
+Iter 103/150, val0: 1455		 val1: 4294967295	 sysfs:1455
+Iter 104/150, val0: 1458		 val1: 4294967295	 sysfs:1458
+Iter 105/150, val0: 1458		 val1: 4294967295	 sysfs:1458
+Iter 106/150, val0: 1505		 val1: 4294967295	 sysfs:1506
+Iter 107/150, val0: 1860		 val1: 4294967295	 sysfs:1864
+Iter 108/150, val0: 1949		 val1: 4294967295	 sysfs:1949
+Iter 109/150, val0: 1956		 val1: 4294967295	 sysfs:1956
+Iter 110/150, val0: 2049		 val1: 4294967295	 sysfs:2049
+Iter 111/150, val0: 2379		 val1: 4294967295	 sysfs:2380
+Iter 112/150, val0: 2487		 val1: 4294967295	 sysfs:2485
+Iter 113/150, val0: 2487		 val1: 4294967295	 sysfs:2487
+Iter 114/150, val0: 2637		 val1: 4294967295	 sysfs:2640
+Iter 115/150, val0: 3000		 val1: 4294967295	 sysfs:3000
+Iter 116/150, val0: 3013		 val1: 4294967295	 sysfs:3013
+Iter 117/150, val0: 3037		 val1: 4294967295	 sysfs:3036
+Iter 118/150, val0: 3237		 val1: 4294967295	 sysfs:3236
+Iter 119/150, val0: 3475		 val1: 4294967295	 sysfs:3475
+Iter 120/150, val0: 3467		 val1: 4294967295	 sysfs:3467
+Iter 121/150, val0: 3547		 val1: 4294967295	 sysfs:3547
+Iter 122/150, val0: 3551		 val1: 4294967295	 sysfs:3551
+Iter 123/150, val0: 3547		 val1: 4294967295	 sysfs:3545
+Iter 124/150, val0: 3547		 val1: 4294967295	 sysfs:3547
+Iter 125/150, val0: 3546		 val1: 4294967295	 sysfs:3546
+Iter 126/150, val0: 3543		 val1: 4294967295	 sysfs:3542
+Iter 127/150, val0: 3524		 val1: 4294967295	 sysfs:3522
+Iter 128/150, val0: 3529		 val1: 4294967295	 sysfs:3529
+Iter 129/150, val0: 3528		 val1: 4294967295	 sysfs:3530
+Iter 130/150, val0: 3529		 val1: 4294967295	 sysfs:3529
+Iter 131/150, val0: 3526		 val1: 4294967295	 sysfs:3525
+Iter 132/150, val0: 3513		 val1: 4294967295	 sysfs:3513
+Iter 133/150, val0: 3511		 val1: 4294967295	 sysfs:3511
+Iter 134/150, val0: 3513		 val1: 4294967295	 sysfs:3514
+Iter 135/150, val0: 3589		 val1: 4294967295	 sysfs:3589
+Iter 136/150, val0: 3581		 val1: 4294967295	 sysfs:3581
+Iter 137/150, val0: 3576		 val1: 4294967295	 sysfs:3578
+Iter 138/150, val0: 3557		 val1: 4294967295	 sysfs:3557
+Iter 139/150, val0: 3550		 val1: 4294967295	 sysfs:3550
+Iter 140/150, val0: 3557		 val1: 4294967295	 sysfs:3557
+Iter 141/150, val0: 3565		 val1: 4294967295	 sysfs:3565
+Iter 142/150, val0: 3555		 val1: 4294967295	 sysfs:3554
+Iter 143/150, val0: 3548		 val1: 4294967295	 sysfs:3548
+Iter 144/150, val0: 3604		 val1: 4294967295	 sysfs:3604
+Iter 145/150, val0: 3604		 val1: 4294967295	 sysfs:3604
+Iter 146/150, val0: 3596		 val1: 4294967295	 sysfs:3597
+Iter 147/150, val0: 3595		 val1: 4294967295	 sysfs:3595
+Iter 148/150, val0: 3627		 val1: 4294967295	 sysfs:3627
+Iter 149/150, val0: 3628		 val1: 4294967295	 sysfs:3627
+Shutting down.
+

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Building .p"
+
+pasm -b firmware-j0.p
+
+echo "Building .c"
+
+# gcc -g PRUClock-j2.c -o pruclock-j2 -lpthread -lprussdrv
+gcc -g run_pru_simple.c -o run_pru_simple -lprussdrv
+
+echo "Running .c"
+
+./run_pru_simple
+

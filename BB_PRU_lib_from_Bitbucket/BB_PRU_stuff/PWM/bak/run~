@@ -1,0 +1,15 @@
+#!/bin/bash
+
+echo "Building .p"
+
+pasm -b PRUClock-j1.p
+
+echo "Building .c"
+
+# gcc -g PRUClock-j2.c -o pruclock-j2 -lpthread -lprussdrv
+gcc -g PRUClock-j2.c -o pruclock-j2 
+
+echo "Running .c"
+
+./pruclock-j2
+

@@ -1,0 +1,2075 @@
+// 03-lib test
+
+test0: get a data packet
+test1: get several data packets in rapid succession
+test2: like 02-gpio-song but cleaner code
+test3: drive motor fwd and backward for a second each
+test4: system identification on the motor
+
+
+test0 example output:
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./run
+I'm in: 
+/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests
+==========================
+building PRU library...
+Compiling .c file jpp-pru-lib.c into .o file jpp-pru-lib.o
+Using pasm to assemble .p file jpp-pru-lib.p into .bin file jpp-pru-lib.bin...
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 306 word(s)
+
+Building test .c file test0-get-data.c to make test0-get-data
+NOT Running 
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test0-get-data'
+>   C-c C-c
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test0-get-data
+Welcome to the Beaglebone PRU library for real-time controls!
+NOTE: if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTS
+prussdrv_init() (returned 0)
+prussdrv_open (returned 0)
+prussdrv_pruintc_init (returned 0)
+pruss_map_prumem (returned 0)
+pru0 data memory addr: 0xb6d86000
+ ctrladdr_CPU_wants_data : 0xb6d86000
+ ctrladdr_PRU_data_ready : 0xb6d86004
+ ctrladdr_CPU_new_sched  : 0xb6d86008
+ ctrladdr_PRU_ack_sched  : 0xb6d8600c
+ addr_cpu_data_buf : 0xb6d86010
+ addr_pru_data_buf : 0xb6d86410
+ addr_cpu_cmd_buf  : 0xb6d86810
+ addr_pru_cmd_buf  : 0xb6d86a10
+executing bin file: ./jpp-pru-lib.bin
+NOTE: a lot of stuff assumes PRU0 in this lib, sry.
+prussdrv_exec_program returned 0
+Waiting 200ms to let PRU fill its internal buffer...done.
+cycle: 9000028 sample: 8 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 10000028 sample: 9 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 11000028 sample: 10 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 12000028 sample: 11 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 13000028 sample: 12 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 14000028 sample: 13 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 15000028 sample: 14 adc: 2048 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 16000028 sample: 15 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 17000028 sample: 16 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 18000028 sample: 17 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 19000028 sample: 18 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 20000028 sample: 19 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 21000028 sample: 20 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 22000028 sample: 21 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 23000028 sample: 22 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 24000028 sample: 23 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 25000028 sample: 24 adc: 2048 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 26000028 sample: 25 adc: 2048 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 27000028 sample: 26 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 28000028 sample: 27 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 29000028 sample: 28 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2052 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+test1 example output:
+
+note that I was twirling the rotary encoder back and forth while this code was running. you can see the eqep sensor jiggling around.
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./run
+I'm in: 
+/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests
+==========================
+building PRU library...
+Compiling .c file jpp-pru-lib.c into .o file jpp-pru-lib.o
+Using pasm to assemble .p file jpp-pru-lib.p into .bin file jpp-pru-lib.bin...
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 306 word(s)
+
+Building test .c file test1-get-data-fast.c to make test1-get-data-fast
+NOT Running 
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test1-get-data-fast
+Welcome to the Beaglebone PRU library for real-time controls!
+NOTE: if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTS
+prussdrv_init() (returned 0)
+prussdrv_open (returned 0)
+prussdrv_pruintc_init (returned 0)
+pruss_map_prumem (returned 0)
+pru0 data memory addr: 0xb6dc6000
+ ctrladdr_CPU_wants_data : 0xb6dc6000
+ ctrladdr_PRU_data_ready : 0xb6dc6004
+ ctrladdr_CPU_new_sched  : 0xb6dc6008
+ ctrladdr_PRU_ack_sched  : 0xb6dc600c
+ addr_cpu_data_buf : 0xb6dc6010
+ addr_pru_data_buf : 0xb6dc6410
+ addr_cpu_cmd_buf  : 0xb6dc6810
+ addr_pru_cmd_buf  : 0xb6dc6a10
+executing bin file: ./jpp-pru-lib.bin
+NOTE: a lot of stuff assumes PRU0 in this lib, sry.
+prussdrv_exec_program returned 0
+Waiting 200ms to let PRU fill its internal buffer...done.
+Retrieving data bufs:
+Done, printing data bufs:
+Buffer 0:
+cycle: 9000028 sample: 8 adc: 2049 eqep: 51 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 10000028 sample: 9 adc: 2049 eqep: 50 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 11000028 sample: 10 adc: 2050 eqep: 49 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 12000028 sample: 11 adc: 2049 eqep: 48 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 13000028 sample: 12 adc: 2050 eqep: 47 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 14000028 sample: 13 adc: 2050 eqep: 47 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 15000028 sample: 14 adc: 2049 eqep: 47 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 16000028 sample: 15 adc: 2050 eqep: 47 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 17000028 sample: 16 adc: 2050 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 18000028 sample: 17 adc: 2049 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 19000028 sample: 18 adc: 2050 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 20000028 sample: 19 adc: 2050 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 21000028 sample: 20 adc: 2049 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 22000028 sample: 21 adc: 2050 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 23000028 sample: 22 adc: 2050 eqep: 46 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 24000028 sample: 23 adc: 2050 eqep: 45 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 25000028 sample: 24 adc: 2050 eqep: 45 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 26000028 sample: 25 adc: 2048 eqep: 47 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 27000028 sample: 26 adc: 2049 eqep: 52 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 28000028 sample: 27 adc: 2050 eqep: 60 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 29000028 sample: 28 adc: 2050 eqep: 67 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2050 eqep: 74 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2050 eqep: 83 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2051 eqep: 94 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2050 eqep: 106 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2050 eqep: 119 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2049 eqep: 132 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2050 eqep: 143 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2049 eqep: 153 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2050 eqep: 163 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: 174 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2050 eqep: 188 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+Buffer 1:
+cycle: 29000028 sample: 28 adc: 2050 eqep: 67 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2050 eqep: 74 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2050 eqep: 83 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2051 eqep: 94 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2050 eqep: 106 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2050 eqep: 119 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2049 eqep: 132 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2050 eqep: 143 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2049 eqep: 153 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2050 eqep: 163 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: 174 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2050 eqep: 188 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 41000014 sample: 40 adc: 2051 eqep: 207 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 42000014 sample: 41 adc: 2048 eqep: 234 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 43000014 sample: 42 adc: 2051 eqep: 269 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 44000014 sample: 43 adc: 2050 eqep: 308 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 45000014 sample: 44 adc: 2049 eqep: 348 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 46000014 sample: 45 adc: 2049 eqep: 379 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 47000014 sample: 46 adc: 2049 eqep: 405 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 48000014 sample: 47 adc: 2050 eqep: 424 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 49000014 sample: 48 adc: 2050 eqep: 441 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 50000014 sample: 49 adc: 2050 eqep: 454 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 51000014 sample: 50 adc: 2050 eqep: 467 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 52000014 sample: 51 adc: 2049 eqep: 480 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 53000014 sample: 52 adc: 2048 eqep: 495 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 54000014 sample: 53 adc: 2049 eqep: 510 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 55000014 sample: 54 adc: 2050 eqep: 525 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 56000014 sample: 55 adc: 2051 eqep: 540 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 57000014 sample: 56 adc: 2050 eqep: 554 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 58000014 sample: 57 adc: 2050 eqep: 571 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 59000014 sample: 58 adc: 2049 eqep: 584 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 60000014 sample: 59 adc: 2050 eqep: 597 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+Buffer 2:
+cycle: 49000014 sample: 48 adc: 2050 eqep: 441 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 50000014 sample: 49 adc: 2050 eqep: 454 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 51000014 sample: 50 adc: 2050 eqep: 467 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 52000014 sample: 51 adc: 2049 eqep: 480 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 53000014 sample: 52 adc: 2048 eqep: 495 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 54000014 sample: 53 adc: 2049 eqep: 510 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 55000014 sample: 54 adc: 2050 eqep: 525 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 56000014 sample: 55 adc: 2051 eqep: 540 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 57000014 sample: 56 adc: 2050 eqep: 554 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 58000014 sample: 57 adc: 2050 eqep: 571 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 59000014 sample: 58 adc: 2049 eqep: 584 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 60000014 sample: 59 adc: 2050 eqep: 597 gpio: 0 duty: 100 last-data-req: 40554491 last-cmd: 0
+cycle: 61000014 sample: 60 adc: 2049 eqep: 608 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 62000014 sample: 61 adc: 2049 eqep: 615 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 63000014 sample: 62 adc: 2049 eqep: 623 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 64000014 sample: 63 adc: 2049 eqep: 631 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 65000017 sample: 64 adc: 2050 eqep: 638 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 66000016 sample: 65 adc: 2051 eqep: 645 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 67000016 sample: 66 adc: 2049 eqep: 650 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 68000016 sample: 67 adc: 2050 eqep: 654 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 69000016 sample: 68 adc: 2050 eqep: 655 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 70000016 sample: 69 adc: 2051 eqep: 653 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 71000016 sample: 70 adc: 2049 eqep: 646 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 72000016 sample: 71 adc: 2050 eqep: 635 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 73000016 sample: 72 adc: 2050 eqep: 621 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 74000016 sample: 73 adc: 2050 eqep: 603 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 75000016 sample: 74 adc: 2051 eqep: 580 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 76000016 sample: 75 adc: 2049 eqep: 554 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 77000016 sample: 76 adc: 2049 eqep: 525 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 78000016 sample: 77 adc: 2049 eqep: 490 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 79000016 sample: 78 adc: 2051 eqep: 446 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 80000016 sample: 79 adc: 2051 eqep: 389 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+Buffer 3:
+cycle: 69000016 sample: 68 adc: 2050 eqep: 655 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 70000016 sample: 69 adc: 2051 eqep: 653 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 71000016 sample: 70 adc: 2049 eqep: 646 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 72000016 sample: 71 adc: 2050 eqep: 635 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 73000016 sample: 72 adc: 2050 eqep: 621 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 74000016 sample: 73 adc: 2050 eqep: 603 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 75000016 sample: 74 adc: 2051 eqep: 580 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 76000016 sample: 75 adc: 2049 eqep: 554 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 77000016 sample: 76 adc: 2049 eqep: 525 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 78000016 sample: 77 adc: 2049 eqep: 490 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 79000016 sample: 78 adc: 2051 eqep: 446 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 80000016 sample: 79 adc: 2051 eqep: 389 gpio: 0 duty: 100 last-data-req: 60790923 last-cmd: 0
+cycle: 81000016 sample: 80 adc: 2051 eqep: 322 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 82000016 sample: 81 adc: 2051 eqep: 249 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 83000016 sample: 82 adc: 2050 eqep: 174 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 84000016 sample: 83 adc: 2050 eqep: 92 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 85000016 sample: 84 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 86000016 sample: 85 adc: 2051 eqep: -72 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 87000016 sample: 86 adc: 2049 eqep: -137 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 88000016 sample: 87 adc: 2049 eqep: -183 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 89000016 sample: 88 adc: 2051 eqep: -218 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 90000016 sample: 89 adc: 2051 eqep: -250 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 91000016 sample: 90 adc: 2050 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 92000016 sample: 91 adc: 2051 eqep: -266 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 93000016 sample: 92 adc: 2051 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 94000016 sample: 93 adc: 2049 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 95000016 sample: 94 adc: 2051 eqep: -264 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 96000016 sample: 95 adc: 2050 eqep: -264 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 97000019 sample: 96 adc: 2050 eqep: -263 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 98000018 sample: 97 adc: 2050 eqep: -262 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 99000018 sample: 98 adc: 2050 eqep: -261 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 100000018 sample: 99 adc: 2050 eqep: -260 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+Buffer 4:
+cycle: 89000016 sample: 88 adc: 2051 eqep: -218 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 90000016 sample: 89 adc: 2051 eqep: -250 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 91000016 sample: 90 adc: 2050 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 92000016 sample: 91 adc: 2051 eqep: -266 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 93000016 sample: 92 adc: 2051 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 94000016 sample: 93 adc: 2049 eqep: -265 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 95000016 sample: 94 adc: 2051 eqep: -264 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 96000016 sample: 95 adc: 2050 eqep: -264 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 97000019 sample: 96 adc: 2050 eqep: -263 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 98000018 sample: 97 adc: 2050 eqep: -262 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 99000018 sample: 98 adc: 2050 eqep: -261 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 100000018 sample: 99 adc: 2050 eqep: -260 gpio: 0 duty: 100 last-data-req: 80830269 last-cmd: 0
+cycle: 101000018 sample: 100 adc: 2051 eqep: -257 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 102000018 sample: 101 adc: 2050 eqep: -254 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 103000018 sample: 102 adc: 2050 eqep: -251 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 104000018 sample: 103 adc: 2051 eqep: -247 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 105000018 sample: 104 adc: 2050 eqep: -243 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 106000018 sample: 105 adc: 2048 eqep: -238 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 107000018 sample: 106 adc: 2049 eqep: -232 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 108000018 sample: 107 adc: 2050 eqep: -226 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 109000018 sample: 108 adc: 2051 eqep: -219 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 110000018 sample: 109 adc: 2051 eqep: -210 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 111000018 sample: 110 adc: 2051 eqep: -197 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 112000018 sample: 111 adc: 2050 eqep: -180 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 113000018 sample: 112 adc: 2050 eqep: -159 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 114000018 sample: 113 adc: 2051 eqep: -135 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 115000018 sample: 114 adc: 2049 eqep: -105 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 116000018 sample: 115 adc: 2050 eqep: -68 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 117000018 sample: 116 adc: 2051 eqep: -23 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 118000018 sample: 117 adc: 2049 eqep: 26 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 119000018 sample: 118 adc: 2050 eqep: 82 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 120000018 sample: 119 adc: 2050 eqep: 140 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+Buffer 5:
+cycle: 109000018 sample: 108 adc: 2051 eqep: -219 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 110000018 sample: 109 adc: 2051 eqep: -210 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 111000018 sample: 110 adc: 2051 eqep: -197 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 112000018 sample: 111 adc: 2050 eqep: -180 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 113000018 sample: 112 adc: 2050 eqep: -159 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 114000018 sample: 113 adc: 2051 eqep: -135 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 115000018 sample: 114 adc: 2049 eqep: -105 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 116000018 sample: 115 adc: 2050 eqep: -68 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 117000018 sample: 116 adc: 2051 eqep: -23 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 118000018 sample: 117 adc: 2049 eqep: 26 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 119000018 sample: 118 adc: 2050 eqep: 82 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 120000018 sample: 119 adc: 2050 eqep: 140 gpio: 0 duty: 100 last-data-req: 100865983 last-cmd: 0
+cycle: 121000018 sample: 120 adc: 2050 eqep: 194 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 122000018 sample: 121 adc: 2050 eqep: 250 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 123000018 sample: 122 adc: 2050 eqep: 309 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 124000018 sample: 123 adc: 2050 eqep: 365 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 125000018 sample: 124 adc: 2050 eqep: 415 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 126000018 sample: 125 adc: 2050 eqep: 451 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 127000018 sample: 126 adc: 2050 eqep: 482 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 128000018 sample: 127 adc: 2049 eqep: 507 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 129000021 sample: 128 adc: 2050 eqep: 528 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 130000020 sample: 129 adc: 2050 eqep: 553 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 131000020 sample: 130 adc: 2050 eqep: 572 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 132000020 sample: 131 adc: 2050 eqep: 587 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 133000020 sample: 132 adc: 2050 eqep: 599 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 134000020 sample: 133 adc: 2049 eqep: 609 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 135000020 sample: 134 adc: 2050 eqep: 617 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 136000020 sample: 135 adc: 2050 eqep: 623 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 137000020 sample: 136 adc: 2050 eqep: 627 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 138000020 sample: 137 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 139000020 sample: 138 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 140000020 sample: 139 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+Buffer 6:
+cycle: 130000020 sample: 129 adc: 2050 eqep: 553 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 131000020 sample: 130 adc: 2050 eqep: 572 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 132000020 sample: 131 adc: 2050 eqep: 587 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 133000020 sample: 132 adc: 2050 eqep: 599 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 134000020 sample: 133 adc: 2049 eqep: 609 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 135000020 sample: 134 adc: 2050 eqep: 617 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 136000020 sample: 135 adc: 2050 eqep: 623 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 137000020 sample: 136 adc: 2050 eqep: 627 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 138000020 sample: 137 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 139000020 sample: 138 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 140000020 sample: 139 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 120914591 last-cmd: 0
+cycle: 141000020 sample: 140 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 142000020 sample: 141 adc: 2049 eqep: 629 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 143000020 sample: 142 adc: 2049 eqep: 629 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 144000020 sample: 143 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 145000020 sample: 144 adc: 2050 eqep: 629 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 146000020 sample: 145 adc: 2050 eqep: 627 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 147000020 sample: 146 adc: 2049 eqep: 626 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 148000020 sample: 147 adc: 2050 eqep: 623 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 149000020 sample: 148 adc: 2050 eqep: 619 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 150000020 sample: 149 adc: 2050 eqep: 614 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 151000020 sample: 150 adc: 2050 eqep: 610 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 152000020 sample: 151 adc: 2050 eqep: 602 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 153000020 sample: 152 adc: 2050 eqep: 591 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 154000020 sample: 153 adc: 2050 eqep: 575 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 155000020 sample: 154 adc: 2050 eqep: 553 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 156000020 sample: 155 adc: 2050 eqep: 529 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 157000020 sample: 156 adc: 2050 eqep: 501 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 158000020 sample: 157 adc: 2050 eqep: 467 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 159000020 sample: 158 adc: 2050 eqep: 427 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 160000020 sample: 159 adc: 2050 eqep: 381 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 161000023 sample: 160 adc: 2050 eqep: 329 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+Buffer 7:
+cycle: 150000020 sample: 149 adc: 2050 eqep: 614 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 151000020 sample: 150 adc: 2050 eqep: 610 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 152000020 sample: 151 adc: 2050 eqep: 602 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 153000020 sample: 152 adc: 2050 eqep: 591 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 154000020 sample: 153 adc: 2050 eqep: 575 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 155000020 sample: 154 adc: 2050 eqep: 553 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 156000020 sample: 155 adc: 2050 eqep: 529 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 157000020 sample: 156 adc: 2050 eqep: 501 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 158000020 sample: 157 adc: 2050 eqep: 467 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 159000020 sample: 158 adc: 2050 eqep: 427 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 160000020 sample: 159 adc: 2050 eqep: 381 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 161000023 sample: 160 adc: 2050 eqep: 329 gpio: 0 duty: 100 last-data-req: 140975345 last-cmd: 0
+cycle: 162000022 sample: 161 adc: 2050 eqep: 278 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 163000022 sample: 162 adc: 2050 eqep: 231 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 164000022 sample: 163 adc: 2049 eqep: 185 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 165000022 sample: 164 adc: 2051 eqep: 137 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 166000022 sample: 165 adc: 2050 eqep: 85 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 167000022 sample: 166 adc: 2050 eqep: 35 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 168000022 sample: 167 adc: 2050 eqep: -11 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 169000022 sample: 168 adc: 2050 eqep: -51 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 170000022 sample: 169 adc: 2050 eqep: -77 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 171000022 sample: 170 adc: 2052 eqep: -95 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 172000022 sample: 171 adc: 2049 eqep: -105 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 173000022 sample: 172 adc: 2049 eqep: -109 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 174000022 sample: 173 adc: 2050 eqep: -109 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 175000022 sample: 174 adc: 2050 eqep: -108 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 176000022 sample: 175 adc: 2050 eqep: -104 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2050 eqep: -97 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2050 eqep: -86 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2049 eqep: -69 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2051 eqep: -45 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2049 eqep: -12 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+Buffer 8:
+cycle: 170000022 sample: 169 adc: 2050 eqep: -77 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 171000022 sample: 170 adc: 2052 eqep: -95 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 172000022 sample: 171 adc: 2049 eqep: -105 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 173000022 sample: 172 adc: 2049 eqep: -109 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 174000022 sample: 173 adc: 2050 eqep: -109 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 175000022 sample: 174 adc: 2050 eqep: -108 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 176000022 sample: 175 adc: 2050 eqep: -104 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2050 eqep: -97 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2050 eqep: -86 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2049 eqep: -69 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2051 eqep: -45 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2049 eqep: -12 gpio: 0 duty: 100 last-data-req: 161034275 last-cmd: 0
+cycle: 182000022 sample: 181 adc: 2050 eqep: 18 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 183000022 sample: 182 adc: 2049 eqep: 53 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 184000022 sample: 183 adc: 2050 eqep: 91 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 185000022 sample: 184 adc: 2050 eqep: 130 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 186000022 sample: 185 adc: 2050 eqep: 160 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 187000022 sample: 186 adc: 2049 eqep: 176 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 188000022 sample: 187 adc: 2050 eqep: 181 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 189000022 sample: 188 adc: 2050 eqep: 179 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 190000022 sample: 189 adc: 2050 eqep: 171 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2050 eqep: 158 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2049 eqep: 138 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2051 eqep: 113 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2050 eqep: 88 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2050 eqep: 67 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2050 eqep: 48 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2052 eqep: 33 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2051 eqep: 35 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2050 eqep: 39 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2050 eqep: 42 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 201000024 sample: 200 adc: 2051 eqep: 43 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+Buffer 9:
+cycle: 190000022 sample: 189 adc: 2050 eqep: 171 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2050 eqep: 158 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2049 eqep: 138 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2051 eqep: 113 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2050 eqep: 88 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2050 eqep: 67 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2050 eqep: 48 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2052 eqep: 33 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2051 eqep: 35 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2050 eqep: 39 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2050 eqep: 42 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 201000024 sample: 200 adc: 2051 eqep: 43 gpio: 0 duty: 100 last-data-req: 181093635 last-cmd: 0
+cycle: 202000024 sample: 201 adc: 2050 eqep: 42 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 203000024 sample: 202 adc: 2049 eqep: 40 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 204000024 sample: 203 adc: 2050 eqep: 37 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 205000024 sample: 204 adc: 2051 eqep: 35 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 206000024 sample: 205 adc: 2050 eqep: 34 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 207000024 sample: 206 adc: 2050 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 208000024 sample: 207 adc: 2048 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 209000024 sample: 208 adc: 2050 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 210000024 sample: 209 adc: 2049 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 211000024 sample: 210 adc: 2050 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 212000024 sample: 211 adc: 2049 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 213000024 sample: 212 adc: 2048 eqep: 33 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 214000024 sample: 213 adc: 2050 eqep: 32 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 215000024 sample: 214 adc: 2049 eqep: 29 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 216000024 sample: 215 adc: 2050 eqep: 23 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 217000024 sample: 216 adc: 2049 eqep: 14 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 218000024 sample: 217 adc: 2051 eqep: 1 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 219000024 sample: 218 adc: 2050 eqep: -16 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 220000024 sample: 219 adc: 2050 eqep: -37 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+cycle: 221000024 sample: 220 adc: 2050 eqep: -61 gpio: 0 duty: 100 last-data-req: 201153157 last-cmd: 0
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# 
+
+
+
+///////////////////////////////////////
+
+test2 example output:
+
+for this one you should hook up an oscope to one of these pins and verify you see the beats of the various songs:
+
+
+r30.t0 P9_31 switch btwn 0 & 1
+r30.t1 P9_29 ghostbusters
+r30.t2 P9_30 terminator
+t30.t5 P9_27 mario
+
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test2-gpio-tests
+Welcome to the Beaglebone PRU library for real-time controls!
+NOTE: if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTS
+prussdrv_init() (returned 0)
+prussdrv_open (returned 0)
+prussdrv_pruintc_init (returned 0)
+pruss_map_prumem (returned 0)
+pru0 data memory addr: 0xb6e2a000
+ ctrladdr_CPU_wants_data : 0xb6e2a000
+ ctrladdr_PRU_data_ready : 0xb6e2a004
+ ctrladdr_CPU_new_sched  : 0xb6e2a008
+ ctrladdr_PRU_ack_sched  : 0xb6e2a00c
+ addr_cpu_data_buf : 0xb6e2a010
+ addr_pru_data_buf : 0xb6e2a410
+ addr_cpu_cmd_buf  : 0xb6e2a810
+ addr_pru_cmd_buf  : 0xb6e2aa10
+executing bin file: ./jpp-pru-lib.bin
+NOTE: a lot of stuff assumes PRU0 in this lib, sry.
+prussdrv_exec_program returned 0
+Waiting 200ms to let PRU fill its internal buffer...done.
+Before:
+cycle: 9000028 sample: 8 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 10000028 sample: 9 adc: 2048 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 11000028 sample: 10 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 12000028 sample: 11 adc: 2048 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 13000028 sample: 12 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 14000028 sample: 13 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 15000028 sample: 14 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 16000028 sample: 15 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 17000028 sample: 16 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 18000028 sample: 17 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 19000028 sample: 18 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 20000028 sample: 19 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 21000028 sample: 20 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 22000028 sample: 21 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 23000028 sample: 22 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 24000028 sample: 23 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 25000028 sample: 24 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 26000028 sample: 25 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 27000028 sample: 26 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 28000028 sample: 27 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 29000028 sample: 28 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2051 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2049 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2050 eqep: 5 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+Sending cmd...
+After 100ms:
+cycle: 210000026 sample: 209 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 211000026 sample: 210 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 212000026 sample: 211 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 213000026 sample: 212 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 214000026 sample: 213 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 215000026 sample: 214 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 216000026 sample: 215 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 217000026 sample: 216 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 218000026 sample: 217 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 219000026 sample: 218 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 220000026 sample: 219 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 221000026 sample: 220 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 222000026 sample: 221 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 223000026 sample: 222 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 224000026 sample: 223 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 225000029 sample: 224 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 226000028 sample: 225 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 227000028 sample: 226 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 228000028 sample: 227 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 229000028 sample: 228 adc: 2052 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 230000028 sample: 229 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 231000028 sample: 230 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 232000028 sample: 231 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 233000028 sample: 232 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 234000028 sample: 233 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 235000028 sample: 234 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 236000028 sample: 235 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 237000028 sample: 236 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 238000028 sample: 237 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 239000028 sample: 238 adc: 2050 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 240000028 sample: 239 adc: 2051 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+cycle: 241000028 sample: 240 adc: 2049 eqep: 5 gpio: 48 duty: 100 last-data-req: 40583307 last-cmd: 40993328
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# 
+
+
+
+
+
+
+//////////////////////////////////////////
+test3-drive-motor
+
+This program drives the gpios so that the motor drives 
+
+  char* cmds_str[] = {"STBY","CW","BRAKE","CCW","BRAKE","CW","STBY"};
+
+
+note: since only 100% or -100% or 0%, I didn't use the 6v battery because 6V thrashes the little motor. Instead I used 2V from the agilent power supply.
+
+
+example output:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./run
+I'm in: 
+/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests
+==========================
+building PRU library...
+Compiling .c file jpp-pru-lib.c into .o file jpp-pru-lib.o
+Using pasm to assemble .p file jpp-pru-lib.p into .bin file jpp-pru-lib.bin...
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 307 word(s)
+
+Building test .c file test3-drive-motor.c to make test3-drive-motor
+NOT Running 
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test3-drive-motor
+Welcome to the Beaglebone PRU library for real-time controls!
+NOTE: if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTS
+prussdrv_init() (returned 0)
+prussdrv_open (returned 0)
+prussdrv_pruintc_init (returned 0)
+pruss_map_prumem (returned 0)
+pru0 data memory addr: 0xb6da5000
+ ctrladdr_CPU_wants_data : 0xb6da5000
+ ctrladdr_PRU_data_ready : 0xb6da5004
+ ctrladdr_CPU_new_sched  : 0xb6da5008
+ ctrladdr_PRU_ack_sched  : 0xb6da500c
+ addr_cpu_data_buf : 0xb6da5010
+ addr_pru_data_buf : 0xb6da5410
+ addr_cpu_cmd_buf  : 0xb6da5810
+ addr_pru_cmd_buf  : 0xb6da5a10
+executing bin file: ./jpp-pru-lib.bin
+NOTE: a lot of stuff assumes PRU0 in this lib, sry.
+prussdrv_exec_program returned 0
+Waiting 200ms to let PRU fill its internal buffer...done.
+0x0	0x5	0x23	0x25
+Cmd (STBY): 0x0
+Data data_buf:
+cycle: 9000028 sample: 8 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 10000028 sample: 9 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 11000028 sample: 10 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 12000028 sample: 11 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 13000028 sample: 12 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 14000028 sample: 13 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 15000028 sample: 14 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 16000028 sample: 15 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 17000028 sample: 16 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 18000028 sample: 17 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 19000028 sample: 18 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 20000028 sample: 19 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 21000028 sample: 20 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 22000028 sample: 21 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 23000028 sample: 22 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 24000028 sample: 23 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 25000028 sample: 24 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 26000028 sample: 25 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 27000028 sample: 26 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 28000028 sample: 27 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 29000028 sample: 28 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 13000028 sample: 12 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 14000028 sample: 13 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 15000028 sample: 14 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 16000028 sample: 15 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 17000028 sample: 16 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 18000028 sample: 17 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 19000028 sample: 18 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 20000028 sample: 19 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 21000028 sample: 20 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 22000028 sample: 21 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 23000028 sample: 22 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 24000028 sample: 23 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 25000028 sample: 24 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 26000028 sample: 25 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 27000028 sample: 26 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 28000028 sample: 27 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 29000028 sample: 28 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 30000028 sample: 29 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 31000028 sample: 30 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 32000028 sample: 31 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 33000015 sample: 32 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 34000014 sample: 33 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 35000014 sample: 34 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 36000014 sample: 35 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 37000014 sample: 36 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 38000014 sample: 37 adc: 2049 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 39000014 sample: 38 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 40000014 sample: 39 adc: 2050 eqep: -49548193 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 41000018 sample: 40 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 40202555 last-cmd: 40612464
+cycle: 42000016 sample: 41 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 40202555 last-cmd: 40612464
+cycle: 43000014 sample: 42 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 40202555 last-cmd: 40612464
+cycle: 44000028 sample: 43 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 40202555 last-cmd: 40612464
+Sleeping for 2 sec...
+Cmd (CW): 0x23
+Data data_buf:
+cycle: 414000024 sample: 413 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 415000024 sample: 414 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 416000024 sample: 415 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 417000027 sample: 416 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 418000026 sample: 417 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 419000026 sample: 418 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 420000026 sample: 419 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 421000026 sample: 420 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 422000026 sample: 421 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 423000026 sample: 422 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 424000026 sample: 423 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 425000026 sample: 424 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 426000026 sample: 425 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 427000026 sample: 426 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 428000026 sample: 427 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 429000026 sample: 428 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 430000026 sample: 429 adc: 2048 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 431000026 sample: 430 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 432000026 sample: 431 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 433000026 sample: 432 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 434000026 sample: 433 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 435000026 sample: 434 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 436000026 sample: 435 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 437000026 sample: 436 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 438000026 sample: 437 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 439000026 sample: 438 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 440000026 sample: 439 adc: 2048 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 441000026 sample: 440 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 442000026 sample: 441 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 443000026 sample: 442 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 444000026 sample: 443 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 445000026 sample: 444 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 420000026 sample: 419 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 421000026 sample: 420 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 422000026 sample: 421 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 423000026 sample: 422 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 424000026 sample: 423 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 425000026 sample: 424 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 426000026 sample: 425 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 427000026 sample: 426 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 428000026 sample: 427 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 429000026 sample: 428 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 430000026 sample: 429 adc: 2048 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 431000026 sample: 430 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 432000026 sample: 431 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 433000026 sample: 432 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 434000026 sample: 433 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 435000026 sample: 434 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 436000026 sample: 435 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 437000026 sample: 436 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 438000026 sample: 437 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 439000026 sample: 438 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 440000026 sample: 439 adc: 2048 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 441000026 sample: 440 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 442000026 sample: 441 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 443000026 sample: 442 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 444000026 sample: 443 adc: 2049 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 445000026 sample: 444 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 44778855 last-cmd: 40612464
+cycle: 446000026 sample: 445 adc: 2050 eqep: -49548193 gpio: 48 duty: 100 last-data-req: 445253783 last-cmd: 40612464
+cycle: 447000014 sample: 446 adc: 2050 eqep: -49548193 gpio: 6b duty: 100 last-data-req: 445253783 last-cmd: 446224140
+cycle: 448000028 sample: 447 adc: 2050 eqep: -49548203 gpio: 6b duty: 100 last-data-req: 445253783 last-cmd: 446224140
+cycle: 449000029 sample: 448 adc: 2050 eqep: -49548274 gpio: 6b duty: 100 last-data-req: 445253783 last-cmd: 446224140
+cycle: 450000026 sample: 449 adc: 2050 eqep: -49548382 gpio: 6b duty: 100 last-data-req: 445253783 last-cmd: 446224140
+cycle: 451000024 sample: 450 adc: 2049 eqep: -49548529 gpio: 6b duty: 100 last-data-req: 445253783 last-cmd: 446224140
+Sleeping for 2 sec...
+Cmd (BRAKE): 0x5
+Data data_buf:
+cycle: 820000022 sample: 819 adc: 2049 eqep: -49729740 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 821000022 sample: 820 adc: 2050 eqep: -49730227 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 822000022 sample: 821 adc: 2050 eqep: -49730743 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 823000022 sample: 822 adc: 2050 eqep: -49731246 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 824000022 sample: 823 adc: 2050 eqep: -49731748 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 825000022 sample: 824 adc: 2049 eqep: -49732246 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 826000022 sample: 825 adc: 2050 eqep: -49732773 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 827000022 sample: 826 adc: 2049 eqep: -49733265 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 828000022 sample: 827 adc: 2050 eqep: -49733755 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 829000022 sample: 828 adc: 2049 eqep: -49734278 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 830000022 sample: 829 adc: 2050 eqep: -49734784 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 831000022 sample: 830 adc: 2050 eqep: -49735271 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 832000022 sample: 831 adc: 2050 eqep: -49735786 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 833000025 sample: 832 adc: 2049 eqep: -49736300 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 834000024 sample: 833 adc: 2050 eqep: -49736796 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 835000024 sample: 834 adc: 2050 eqep: -49737286 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 836000024 sample: 835 adc: 2049 eqep: -49737812 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 837000024 sample: 836 adc: 2050 eqep: -49738315 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 838000024 sample: 837 adc: 2050 eqep: -49738801 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 839000024 sample: 838 adc: 2049 eqep: -49739316 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 840000024 sample: 839 adc: 2050 eqep: -49739830 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 841000024 sample: 840 adc: 2050 eqep: -49740323 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 842000024 sample: 841 adc: 2050 eqep: -49740817 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 843000024 sample: 842 adc: 2049 eqep: -49741338 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 844000024 sample: 843 adc: 2050 eqep: -49741840 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 845000024 sample: 844 adc: 2050 eqep: -49742331 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 846000024 sample: 845 adc: 2049 eqep: -49742844 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 847000024 sample: 846 adc: 2050 eqep: -49743356 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 848000024 sample: 847 adc: 2050 eqep: -49743850 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 849000024 sample: 848 adc: 2050 eqep: -49744340 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 850000024 sample: 849 adc: 2049 eqep: -49744869 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 851000024 sample: 850 adc: 2049 eqep: -49745372 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 826000022 sample: 825 adc: 2050 eqep: -49732773 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 827000022 sample: 826 adc: 2049 eqep: -49733265 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 828000022 sample: 827 adc: 2050 eqep: -49733755 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 829000022 sample: 828 adc: 2049 eqep: -49734278 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 830000022 sample: 829 adc: 2050 eqep: -49734784 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 831000022 sample: 830 adc: 2050 eqep: -49735271 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 832000022 sample: 831 adc: 2050 eqep: -49735786 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 833000025 sample: 832 adc: 2049 eqep: -49736300 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 834000024 sample: 833 adc: 2050 eqep: -49736796 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 835000024 sample: 834 adc: 2050 eqep: -49737286 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 836000024 sample: 835 adc: 2049 eqep: -49737812 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 837000024 sample: 836 adc: 2050 eqep: -49738315 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 838000024 sample: 837 adc: 2050 eqep: -49738801 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 839000024 sample: 838 adc: 2049 eqep: -49739316 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 840000024 sample: 839 adc: 2050 eqep: -49739830 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 841000024 sample: 840 adc: 2050 eqep: -49740323 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 842000024 sample: 841 adc: 2050 eqep: -49740817 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 843000024 sample: 842 adc: 2049 eqep: -49741338 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 844000024 sample: 843 adc: 2050 eqep: -49741840 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 845000024 sample: 844 adc: 2050 eqep: -49742331 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 846000024 sample: 845 adc: 2049 eqep: -49742844 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 847000024 sample: 846 adc: 2050 eqep: -49743356 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 848000024 sample: 847 adc: 2050 eqep: -49743850 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 849000024 sample: 848 adc: 2050 eqep: -49744340 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 850000024 sample: 849 adc: 2049 eqep: -49744869 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 851000024 sample: 850 adc: 2049 eqep: -49745372 gpio: 6b duty: 100 last-data-req: 451024851 last-cmd: 446224140
+cycle: 852000024 sample: 851 adc: 2050 eqep: -49745855 gpio: 6b duty: 100 last-data-req: 851521557 last-cmd: 446224140
+cycle: 853000028 sample: 852 adc: 2052 eqep: -49746374 gpio: 4d duty: 100 last-data-req: 851521557 last-cmd: 852443642
+cycle: 854000026 sample: 853 adc: 2049 eqep: -49746859 gpio: 4d duty: 100 last-data-req: 851521557 last-cmd: 852443642
+cycle: 855000024 sample: 854 adc: 2051 eqep: -49747278 gpio: 4d duty: 100 last-data-req: 851521557 last-cmd: 852443642
+cycle: 856000022 sample: 855 adc: 2049 eqep: -49747649 gpio: 4d duty: 100 last-data-req: 851521557 last-cmd: 852443642
+cycle: 857000020 sample: 856 adc: 2049 eqep: -49747990 gpio: 4d duty: 100 last-data-req: 851521557 last-cmd: 852443642
+Sleeping for 2 sec...
+Cmd (CCW): 0x25
+Data data_buf:
+cycle: 1226000020 sample: 1225 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1227000020 sample: 1226 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1228000020 sample: 1227 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1229000020 sample: 1228 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1230000020 sample: 1229 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1231000020 sample: 1230 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1232000020 sample: 1231 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1233000020 sample: 1232 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1234000020 sample: 1233 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1235000020 sample: 1234 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1236000020 sample: 1235 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1237000020 sample: 1236 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1238000020 sample: 1237 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1239000020 sample: 1238 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1240000020 sample: 1239 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1241000020 sample: 1240 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1242000020 sample: 1241 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1243000020 sample: 1242 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1244000020 sample: 1243 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1245000020 sample: 1244 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1246000020 sample: 1245 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1247000020 sample: 1246 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1248000020 sample: 1247 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1249000023 sample: 1248 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1250000022 sample: 1249 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1251000022 sample: 1250 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1252000022 sample: 1251 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1253000022 sample: 1252 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1254000022 sample: 1253 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1255000022 sample: 1254 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1256000022 sample: 1255 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1257000022 sample: 1256 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 1232000020 sample: 1231 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1233000020 sample: 1232 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1234000020 sample: 1233 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1235000020 sample: 1234 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1236000020 sample: 1235 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1237000020 sample: 1236 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1238000020 sample: 1237 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1239000020 sample: 1238 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1240000020 sample: 1239 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1241000020 sample: 1240 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1242000020 sample: 1241 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1243000020 sample: 1242 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1244000020 sample: 1243 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1245000020 sample: 1244 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1246000020 sample: 1245 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1247000020 sample: 1246 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1248000020 sample: 1247 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1249000023 sample: 1248 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1250000022 sample: 1249 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1251000022 sample: 1250 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1252000022 sample: 1251 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1253000022 sample: 1252 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1254000022 sample: 1253 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1255000022 sample: 1254 adc: 2049 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1256000022 sample: 1255 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1257000022 sample: 1256 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 857255455 last-cmd: 852443642
+cycle: 1258000022 sample: 1257 adc: 2050 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 1257740979 last-cmd: 852443642
+cycle: 1259000022 sample: 1258 adc: 2051 eqep: -49750051 gpio: 4d duty: 100 last-data-req: 1257740979 last-cmd: 852443642
+cycle: 1260000026 sample: 1259 adc: 2050 eqep: -49750051 gpio: 6d duty: 100 last-data-req: 1257740979 last-cmd: 1259107208
+cycle: 1261000024 sample: 1260 adc: 2051 eqep: -49750026 gpio: 6d duty: 100 last-data-req: 1257740979 last-cmd: 1259107208
+cycle: 1262000022 sample: 1261 adc: 2051 eqep: -49749954 gpio: 6d duty: 100 last-data-req: 1257740979 last-cmd: 1259107208
+cycle: 1263000020 sample: 1262 adc: 2049 eqep: -49749848 gpio: 6d duty: 100 last-data-req: 1257740979 last-cmd: 1259107208
+Sleeping for 2 sec...
+Cmd (BRAKE): 0x5
+Data data_buf:
+cycle: 1632000016 sample: 1631 adc: 2049 eqep: -49566341 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1633000019 sample: 1632 adc: 2051 eqep: -49565856 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1634000018 sample: 1633 adc: 2050 eqep: -49565331 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1635000018 sample: 1634 adc: 2050 eqep: -49564815 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1636000018 sample: 1635 adc: 2050 eqep: -49564316 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1637000018 sample: 1636 adc: 2050 eqep: -49563817 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1638000018 sample: 1637 adc: 2050 eqep: -49563286 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1639000018 sample: 1638 adc: 2051 eqep: -49562781 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1640000018 sample: 1639 adc: 2050 eqep: -49562292 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1641000018 sample: 1640 adc: 2050 eqep: -49561768 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1642000018 sample: 1641 adc: 2050 eqep: -49561252 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1643000018 sample: 1642 adc: 2049 eqep: -49560759 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1644000018 sample: 1643 adc: 2049 eqep: -49560251 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1645000018 sample: 1644 adc: 2049 eqep: -49559732 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1646000018 sample: 1645 adc: 2049 eqep: -49559229 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1647000018 sample: 1646 adc: 2050 eqep: -49558727 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1648000018 sample: 1647 adc: 2050 eqep: -49558205 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1649000018 sample: 1648 adc: 2050 eqep: -49557689 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1650000018 sample: 1649 adc: 2050 eqep: -49557196 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1651000018 sample: 1650 adc: 2050 eqep: -49556691 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1652000018 sample: 1651 adc: 2050 eqep: -49556160 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1653000018 sample: 1652 adc: 2049 eqep: -49555657 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1654000018 sample: 1653 adc: 2050 eqep: -49555168 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1655000018 sample: 1654 adc: 2050 eqep: -49554636 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1656000018 sample: 1655 adc: 2050 eqep: -49554126 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1657000018 sample: 1656 adc: 2050 eqep: -49553630 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1658000018 sample: 1657 adc: 2051 eqep: -49553123 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1659000018 sample: 1658 adc: 2050 eqep: -49552597 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1660000018 sample: 1659 adc: 2049 eqep: -49552096 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1661000018 sample: 1660 adc: 2051 eqep: -49551603 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1662000018 sample: 1661 adc: 2051 eqep: -49551071 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1663000018 sample: 1662 adc: 2051 eqep: -49550560 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 1638000018 sample: 1637 adc: 2050 eqep: -49563286 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1639000018 sample: 1638 adc: 2051 eqep: -49562781 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1640000018 sample: 1639 adc: 2050 eqep: -49562292 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1641000018 sample: 1640 adc: 2050 eqep: -49561768 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1642000018 sample: 1641 adc: 2050 eqep: -49561252 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1643000018 sample: 1642 adc: 2049 eqep: -49560759 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1644000018 sample: 1643 adc: 2049 eqep: -49560251 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1645000018 sample: 1644 adc: 2049 eqep: -49559732 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1646000018 sample: 1645 adc: 2049 eqep: -49559229 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1647000018 sample: 1646 adc: 2050 eqep: -49558727 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1648000018 sample: 1647 adc: 2050 eqep: -49558205 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1649000018 sample: 1648 adc: 2050 eqep: -49557689 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1650000018 sample: 1649 adc: 2050 eqep: -49557196 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1651000018 sample: 1650 adc: 2050 eqep: -49556691 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1652000018 sample: 1651 adc: 2050 eqep: -49556160 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1653000018 sample: 1652 adc: 2049 eqep: -49555657 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1654000018 sample: 1653 adc: 2050 eqep: -49555168 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1655000018 sample: 1654 adc: 2050 eqep: -49554636 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1656000018 sample: 1655 adc: 2050 eqep: -49554126 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1657000018 sample: 1656 adc: 2050 eqep: -49553630 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1658000018 sample: 1657 adc: 2051 eqep: -49553123 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1659000018 sample: 1658 adc: 2050 eqep: -49552597 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1660000018 sample: 1659 adc: 2049 eqep: -49552096 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1661000018 sample: 1660 adc: 2051 eqep: -49551603 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1662000018 sample: 1661 adc: 2051 eqep: -49551071 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1663000018 sample: 1662 adc: 2051 eqep: -49550560 gpio: 6d duty: 100 last-data-req: 1263200415 last-cmd: 1259107208
+cycle: 1664000018 sample: 1663 adc: 2050 eqep: -49550070 gpio: 6d duty: 100 last-data-req: 1663690127 last-cmd: 1259107208
+cycle: 1665000025 sample: 1664 adc: 2048 eqep: -49549550 gpio: 4d duty: 100 last-data-req: 1663690127 last-cmd: 1664925687
+cycle: 1666000022 sample: 1665 adc: 2050 eqep: -49549055 gpio: 4d duty: 100 last-data-req: 1663690127 last-cmd: 1664925687
+cycle: 1667000020 sample: 1666 adc: 2049 eqep: -49548630 gpio: 4d duty: 100 last-data-req: 1663690127 last-cmd: 1664925687
+cycle: 1668000018 sample: 1667 adc: 2051 eqep: -49548256 gpio: 4d duty: 100 last-data-req: 1663690127 last-cmd: 1664925687
+cycle: 1669000016 sample: 1668 adc: 2050 eqep: -49547915 gpio: 4d duty: 100 last-data-req: 1663690127 last-cmd: 1664925687
+Sleeping for 2 sec...
+Cmd (CW): 0x23
+Data data_buf:
+cycle: 2038000014 sample: 2037 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2039000014 sample: 2038 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2040000014 sample: 2039 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2041000014 sample: 2040 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2042000014 sample: 2041 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2043000014 sample: 2042 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2044000014 sample: 2043 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2045000014 sample: 2044 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2046000014 sample: 2045 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2047000014 sample: 2046 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2048000014 sample: 2047 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2049000017 sample: 2048 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2050000016 sample: 2049 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2051000016 sample: 2050 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2052000016 sample: 2051 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2053000016 sample: 2052 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2054000016 sample: 2053 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2055000016 sample: 2054 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2056000016 sample: 2055 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2057000016 sample: 2056 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2058000016 sample: 2057 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2059000016 sample: 2058 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2060000016 sample: 2059 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2061000016 sample: 2060 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2062000016 sample: 2061 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2063000016 sample: 2062 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2064000016 sample: 2063 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2065000016 sample: 2064 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2066000016 sample: 2065 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2067000016 sample: 2066 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2068000016 sample: 2067 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2069000016 sample: 2068 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 2044000014 sample: 2043 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2045000014 sample: 2044 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2046000014 sample: 2045 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2047000014 sample: 2046 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2048000014 sample: 2047 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2049000017 sample: 2048 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2050000016 sample: 2049 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2051000016 sample: 2050 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2052000016 sample: 2051 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2053000016 sample: 2052 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2054000016 sample: 2053 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2055000016 sample: 2054 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2056000016 sample: 2055 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2057000016 sample: 2056 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2058000016 sample: 2057 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2059000016 sample: 2058 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2060000016 sample: 2059 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2061000016 sample: 2060 adc: 2049 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2062000016 sample: 2061 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2063000016 sample: 2062 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2064000016 sample: 2063 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2065000016 sample: 2064 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2066000016 sample: 2065 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2067000016 sample: 2066 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2068000016 sample: 2067 adc: 2050 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2069000016 sample: 2068 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 1669048635 last-cmd: 1664925687
+cycle: 2070000016 sample: 2069 adc: 2051 eqep: -49545846 gpio: 4d duty: 100 last-data-req: 2069527773 last-cmd: 1664925687
+cycle: 2071000020 sample: 2070 adc: 2048 eqep: -49545846 gpio: 6b duty: 100 last-data-req: 2069527773 last-cmd: 2070420594
+cycle: 2072000018 sample: 2071 adc: 2050 eqep: -49545868 gpio: 6b duty: 100 last-data-req: 2069527773 last-cmd: 2070420594
+cycle: 2073000016 sample: 2072 adc: 2050 eqep: -49545941 gpio: 6b duty: 100 last-data-req: 2069527773 last-cmd: 2070420594
+cycle: 2074000014 sample: 2073 adc: 2050 eqep: -49546051 gpio: 6b duty: 100 last-data-req: 2069527773 last-cmd: 2070420594
+cycle: 2075000028 sample: 2074 adc: 2050 eqep: -49546198 gpio: 6b duty: 100 last-data-req: 2069527773 last-cmd: 2070420594
+Sleeping for 2 sec...
+Cmd (STBY): 0x0
+Data data_buf:
+cycle: 2444000028 sample: 2443 adc: 2050 eqep: -49727714 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2445000028 sample: 2444 adc: 2051 eqep: -49728200 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2446000028 sample: 2445 adc: 2050 eqep: -49728705 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2447000028 sample: 2446 adc: 2050 eqep: -49729219 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2448000028 sample: 2447 adc: 2050 eqep: -49729713 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2449000028 sample: 2448 adc: 2050 eqep: -49730197 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2450000028 sample: 2449 adc: 2050 eqep: -49730713 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2451000028 sample: 2450 adc: 2049 eqep: -49731213 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2452000028 sample: 2451 adc: 2050 eqep: -49731711 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2453000028 sample: 2452 adc: 2050 eqep: -49732212 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2454000028 sample: 2453 adc: 2051 eqep: -49732738 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2455000028 sample: 2454 adc: 2050 eqep: -49733231 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2456000028 sample: 2455 adc: 2050 eqep: -49733720 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2457000028 sample: 2456 adc: 2050 eqep: -49734239 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2458000028 sample: 2457 adc: 2049 eqep: -49734744 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2459000028 sample: 2458 adc: 2051 eqep: -49735232 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2460000028 sample: 2459 adc: 2050 eqep: -49735742 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2461000028 sample: 2460 adc: 2049 eqep: -49736257 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2462000028 sample: 2461 adc: 2050 eqep: -49736751 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2463000028 sample: 2462 adc: 2048 eqep: -49737238 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2464000028 sample: 2463 adc: 2050 eqep: -49737759 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2465000015 sample: 2464 adc: 2051 eqep: -49738258 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2466000014 sample: 2465 adc: 2049 eqep: -49738754 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2467000014 sample: 2466 adc: 2049 eqep: -49739255 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2468000014 sample: 2467 adc: 2051 eqep: -49739777 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2469000014 sample: 2468 adc: 2051 eqep: -49740270 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2470000014 sample: 2469 adc: 2051 eqep: -49740761 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2471000014 sample: 2470 adc: 2050 eqep: -49741282 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2472000014 sample: 2471 adc: 2050 eqep: -49741786 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2473000014 sample: 2472 adc: 2050 eqep: -49742272 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2474000014 sample: 2473 adc: 2049 eqep: -49742781 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2475000014 sample: 2474 adc: 2049 eqep: -49743283 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+Sending cmd...
+Sleeping for 20ms...
+Data after:
+cycle: 2450000028 sample: 2449 adc: 2050 eqep: -49730713 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2451000028 sample: 2450 adc: 2049 eqep: -49731213 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2452000028 sample: 2451 adc: 2050 eqep: -49731711 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2453000028 sample: 2452 adc: 2050 eqep: -49732212 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2454000028 sample: 2453 adc: 2051 eqep: -49732738 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2455000028 sample: 2454 adc: 2050 eqep: -49733231 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2456000028 sample: 2455 adc: 2050 eqep: -49733720 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2457000028 sample: 2456 adc: 2050 eqep: -49734239 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2458000028 sample: 2457 adc: 2049 eqep: -49734744 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2459000028 sample: 2458 adc: 2051 eqep: -49735232 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2460000028 sample: 2459 adc: 2050 eqep: -49735742 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2461000028 sample: 2460 adc: 2049 eqep: -49736257 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2462000028 sample: 2461 adc: 2050 eqep: -49736751 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2463000028 sample: 2462 adc: 2048 eqep: -49737238 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2464000028 sample: 2463 adc: 2050 eqep: -49737759 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2465000015 sample: 2464 adc: 2051 eqep: -49738258 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2466000014 sample: 2465 adc: 2049 eqep: -49738754 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2467000014 sample: 2466 adc: 2049 eqep: -49739255 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2468000014 sample: 2467 adc: 2051 eqep: -49739777 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2469000014 sample: 2468 adc: 2051 eqep: -49740270 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2470000014 sample: 2469 adc: 2051 eqep: -49740761 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2471000014 sample: 2470 adc: 2050 eqep: -49741282 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2472000014 sample: 2471 adc: 2050 eqep: -49741786 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2473000014 sample: 2472 adc: 2050 eqep: -49742272 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2474000014 sample: 2473 adc: 2049 eqep: -49742781 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2475000014 sample: 2474 adc: 2049 eqep: -49743283 gpio: 6b duty: 100 last-data-req: 2075254231 last-cmd: 2070420594
+cycle: 2476000014 sample: 2475 adc: 2049 eqep: -49743781 gpio: 6b duty: 100 last-data-req: 2475757883 last-cmd: 2070420594
+cycle: 2477000014 sample: 2476 adc: 2049 eqep: -49744277 gpio: 6b duty: 100 last-data-req: 2475757883 last-cmd: 2070420594
+cycle: 2478000018 sample: 2477 adc: 2047 eqep: -49744800 gpio: 48 duty: 100 last-data-req: 2475757883 last-cmd: 2477452432
+cycle: 2479000016 sample: 2478 adc: 2048 eqep: -49745304 gpio: 48 duty: 100 last-data-req: 2475757883 last-cmd: 2477452432
+cycle: 2480000014 sample: 2479 adc: 2050 eqep: -49745784 gpio: 48 duty: 100 last-data-req: 2475757883 last-cmd: 2477452432
+cycle: 2481000028 sample: 2480 adc: 2050 eqep: -49746268 gpio: 48 duty: 100 last-data-req: 2475757883 last-cmd: 2477452432
+Sleeping for 2 sec...
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////
+
+// 02-gpio-song:
+oscope these pins to see these songs "play" on the oscope:
+
+
+r30.t0 P9_31 switch btwn 0 & 1
+r30.t1 P9_29 ghostbusters
+r30.t2 P9_30 terminator
+t30.t5 P9_27 mario
+
+That is, the CPU sends a cmd buffer to the pru, which the pru executes. 
+
+That cmd buffer contains 32 cmd pkts, which are exeuted sequentially at 5ms intervals as soon as the pru gets it.
+
+Currently the pru only uses the GPIO field of a cmd pkt, switching 4 pins as specified in bits 0,1,2,5 of the gpio unsigned integer field of the cmd pkt.
+
+For each of the 4 gpios, the C program has a hard-coded pattern of 1's and 0's that the pin executes. For example, pin P9_31 is configured to reg 30, bit 0, and the PRU sets this bit according to bit 0 of the gpio unsigned int in each cmd pkt. The hard-coded cmd buffer in this C program was configured so that bit 0 toggles high and low alternately. Bit 1 swiches in time to the beat of the Ghostbuster movie theme song. ETc.
+
+We're sending a cmd pkt to the PRU and it's playing it every 5ms. 
+
+
+
+
+
+/////////////////
+test4-sysid
+
+this program sends a particular trajectory of motor cmds to the motor for the purposes of doing system identification on the system.
+
+
+
+example output:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./run
+I'm in: 
+/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests
+==========================
+building PRU library...
+Compiling .c file jpp-pru-lib.c into .o file jpp-pru-lib.o
+Using pasm to assemble .p file jpp-pru-lib.p into .bin file jpp-pru-lib.bin...
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 307 word(s)
+
+Building test .c file test4-sysid.c to make test4-sysid
+NOT Running 
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ./test4-sysid
+Welcome to the Beaglebone PRU library for real-time controls!
+NOTE: if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTS
+prussdrv_init() (returned 0)
+prussdrv_open (returned 0)
+prussdrv_pruintc_init (returned 0)
+pruss_map_prumem (returned 0)
+pru0 data memory addr: 0xb6cd6000
+ ctrladdr_CPU_wants_data : 0xb6cd6000
+ ctrladdr_PRU_data_ready : 0xb6cd6004
+ ctrladdr_CPU_new_sched  : 0xb6cd6008
+ ctrladdr_PRU_ack_sched  : 0xb6cd600c
+ addr_cpu_data_buf : 0xb6cd6010
+ addr_pru_data_buf : 0xb6cd6410
+ addr_cpu_cmd_buf  : 0xb6cd6810
+ addr_pru_cmd_buf  : 0xb6cd6a10
+executing bin file: ./jpp-pru-lib.bin
+NOTE: a lot of stuff assumes PRU0 in this lib, sry.
+prussdrv_exec_program returned 0
+Waiting 200ms to let PRU fill its internal buffer...done.
+0x0	0x5	0x23	0x25
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# ls
+bak		 jpp-pru-lib.c	  jpp-pru-lib.p   sysid-data.txt	  test2-gpio-tests	test4-sysid.c
+bak2		 jpp-pru-lib.c~   jpp-pru-lib.p~  test0-get-data	  test2-gpio-tests.c	test4-sysid.c~
+jadcpwmeqep.c	 jpp-pru-lib.h	  #readme#	  test0-get-data.c	  test2-gpio-tests.c~
+jadcpwmeqep.h	 jpp-pru-lib.h~   readme.txt	  test0-get-data.c~	  test3-drive-motor
+jadcpwmeqep.h~	 jpp-pru-lib.hp   readme.txt~	  test1-get-data-fast	  test3-drive-motor.c
+jadcpwmeqep.o	 jpp-pru-lib.hp~  run		  test1-get-data-fast.c   test3-drive-motor.c~
+jpp-pru-lib.bin  jpp-pru-lib.o	  run~		  test1-get-data-fast.c~  test4-sysid
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# l
+total 1.7M
+ 20K -rw-r--r-- 1 root root  18K Apr 23  2014 jpp-pru-lib.p
+ 12K -rw-r--r-- 1 root root 8.4K Apr 23  2014 jpp-pru-lib.c
+4.0K drwxr-xr-x 5 root root 4.0K Apr 23  2014 ..
+4.0K -rw-r--r-- 1 root root 3.9K Apr 23  2014 jpp-pru-lib.hp~
+4.0K -rw-r--r-- 1 root root 1.8K Apr 23  2014 test3-drive-motor.c
+ 20K -rwxr-xr-x 1 root root  19K Apr 23  2014 test3-drive-motor
+4.0K -rw-r--r-- 1 root root  125 Apr 23  2014 jpp-pru-lib.h~
+4.0K -rw-r--r-- 1 root root 1.8K Apr 23  2014 test4-sysid.c~
+144K -rw-r--r-- 1 root root 141K Apr 23  2014 readme.txt~
+144K -rw-r--r-- 1 root root 142K Apr 23  2014 readme.txt
+4.0K -rw-r--r-- 1 root root  190 Apr 23  2014 test0-get-data.c~
+ 48K -rw-r--r-- 1 root root  48K Apr 23  2014 jadcpwmeqep.o
+4.0K -rw-r--r-- 1 root root  997 Apr 23  2014 jpp-pru-lib.h
+4.0K -rwxr-xr-x 1 root root 1.3K Apr 23  2014 run~
+4.0K -rw-r--r-- 1 root root 3.1K Apr 30  2014 jadcpwmeqep.h~
+ 40K -rw-r--r-- 1 root root  37K Apr 30  2014 jadcpwmeqep.c
+4.0K drwxr-xr-x 2 root root 4.0K Apr 30  2014 bak
+   0 lrwxrwxrwx 1 root root   32 Apr 30  2014 .#readme -> root@beaglebone.24998:1398791143
+4.0K -rw-r--r-- 1 root root   13 Apr 30  2014 #readme#
+4.0K -rw-r--r-- 1 root root 3.1K Aug 31 16:48 jadcpwmeqep.h
+ 20K -rw-r--r-- 1 root root  18K Sep  2 11:07 jpp-pru-lib.p~
+4.0K -rw-r--r-- 1 root root  984 Sep  2 11:07 test2-gpio-tests.c~
+8.0K -rw-r--r-- 1 root root 4.1K Sep  2 11:08 jpp-pru-lib.hp
+4.0K -rw-r--r-- 1 root root  206 Sep  2 11:09 test1-get-data-fast.c~
+4.0K drwxr-xr-x 2 root root 4.0K Sep  2 11:10 bak2
+4.0K -rw-r--r-- 1 root root  203 Sep  2 11:24 test0-get-data.c
+ 12K -rw-r--r-- 1 root root 8.3K Sep  2 13:49 jpp-pru-lib.c~
+ 20K -rwxr-xr-x 1 root root  17K Sep  2 14:02 test0-get-data
+4.0K -rw-r--r-- 1 root root  591 Sep  2 14:04 test1-get-data-fast.c
+ 20K -rwxr-xr-x 1 root root  18K Sep  2 14:05 test2-gpio-tests
+ 20K -rwxr-xr-x 1 root root  17K Sep  2 14:06 test1-get-data-fast
+4.0K -rw-r--r-- 1 root root 2.0K Sep  2 14:09 test2-gpio-tests.c
+4.0K -rw-r--r-- 1 root root 2.9K Sep  2 16:56 test3-drive-motor.c~
+ 12K -rw-r--r-- 1 root root 8.8K Sep  6 12:09 test4-sysid.c
+4.0K -rwxr-xr-x 1 root root 1.5K Sep  6 12:11 run
+ 16K -rw-r--r-- 1 root root  14K Sep  6 12:11 jpp-pru-lib.o
+4.0K -rw-r--r-- 1 root root 1.2K Sep  6 12:11 jpp-pru-lib.bin
+ 24K -rwxr-xr-x 1 root root  24K Sep  6 12:11 test4-sysid
+4.0K drwxr-xr-x 4 root root 4.0K Sep  6 12:11 .
+972K -rw-r--r-- 1 root root 970K Sep  6 12:11 sysid-data.txt
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/03-pru-ctrls-lib-tests# 
+
+text file output:
+
+cycle: 9000028 sample: 8 adc: 2100 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.063472 angle: 0.000000 volts: 0.000000
+cycle: 10000028 sample: 9 adc: 2152 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.132756 angle: 0.000000 volts: 0.000000
+cycle: 11000028 sample: 10 adc: 2158 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.140751 angle: 0.000000 volts: 0.000000
+cycle: 12000028 sample: 11 adc: 2103 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.067469 angle: 0.000000 volts: 0.000000
+cycle: 13000028 sample: 12 adc: 2115 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.083458 angle: 0.000000 volts: 0.000000
+cycle: 14000028 sample: 13 adc: 2176 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.164734 angle: 0.000000 volts: 0.000000
+cycle: 15000028 sample: 14 adc: 2173 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.160736 angle: 0.000000 volts: 0.000000
+cycle: 16000028 sample: 15 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 0.000000
+cycle: 17000028 sample: 16 adc: 2156 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.138086 angle: 0.000000 volts: 0.000000
+cycle: 18000028 sample: 17 adc: 2147 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.126094 angle: 0.000000 volts: 0.000000
+cycle: 19000028 sample: 18 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 0.000000
+cycle: 20000028 sample: 19 adc: 2184 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.175393 angle: 0.000000 volts: 0.000000
+cycle: 21000028 sample: 20 adc: 2123 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.094117 angle: 0.000000 volts: 0.000000
+cycle: 22000028 sample: 21 adc: 2138 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.114103 angle: 0.000000 volts: 0.000000
+cycle: 23000028 sample: 22 adc: 2180 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.170063 angle: 0.000000 volts: 0.000000
+cycle: 24000028 sample: 23 adc: 2170 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.156739 angle: 0.000000 volts: 0.000000
+cycle: 25000028 sample: 24 adc: 2191 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.184719 angle: 0.000000 volts: 0.000000
+cycle: 26000028 sample: 25 adc: 2162 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.146080 angle: 0.000000 volts: 0.000000
+cycle: 27000028 sample: 26 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 0.000000
+cycle: 28000028 sample: 27 adc: 2163 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.147412 angle: 0.000000 volts: 0.000000
+cycle: 29000028 sample: 28 adc: 2129 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.102111 angle: 0.000000 volts: 0.000000
+cycle: 30000028 sample: 29 adc: 2162 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.146080 angle: 0.000000 volts: 0.000000
+cycle: 31000028 sample: 30 adc: 2169 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.155407 angle: 0.000000 volts: 0.000000
+cycle: 32000028 sample: 31 adc: 2180 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.170063 angle: 0.000000 volts: 0.000000
+cycle: 33000015 sample: 32 adc: 2150 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.130091 angle: 0.000000 volts: 0.000000
+cycle: 34000014 sample: 33 adc: 2147 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.126094 angle: 0.000000 volts: 0.000000
+cycle: 35000014 sample: 34 adc: 2167 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.152742 angle: 0.000000 volts: 0.000000
+cycle: 36000014 sample: 35 adc: 2103 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.067469 angle: 0.000000 volts: 0.000000
+cycle: 37000014 sample: 36 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 0.000000
+cycle: 38000014 sample: 37 adc: 2174 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.162069 angle: 0.000000 volts: 0.000000
+cycle: 39000014 sample: 38 adc: 2201 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.198043 angle: 0.000000 volts: 0.000000
+cycle: 40000014 sample: 39 adc: 2153 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.134089 angle: 0.000000 volts: 0.000000
+cycle: 10000028 sample: 9 adc: 2152 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.132756 angle: 0.000000 volts: 4.000000
+cycle: 11000028 sample: 10 adc: 2158 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.140751 angle: 0.000000 volts: 4.000000
+cycle: 12000028 sample: 11 adc: 2103 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.067469 angle: 0.000000 volts: 4.000000
+cycle: 13000028 sample: 12 adc: 2115 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.083458 angle: 0.000000 volts: 4.000000
+cycle: 14000028 sample: 13 adc: 2176 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.164734 angle: 0.000000 volts: 4.000000
+cycle: 15000028 sample: 14 adc: 2173 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.160736 angle: 0.000000 volts: 4.000000
+cycle: 16000028 sample: 15 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 17000028 sample: 16 adc: 2156 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.138086 angle: 0.000000 volts: 4.000000
+cycle: 18000028 sample: 17 adc: 2147 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.126094 angle: 0.000000 volts: 4.000000
+cycle: 19000028 sample: 18 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 20000028 sample: 19 adc: 2184 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.175393 angle: 0.000000 volts: 4.000000
+cycle: 21000028 sample: 20 adc: 2123 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.094117 angle: 0.000000 volts: 4.000000
+cycle: 22000028 sample: 21 adc: 2138 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.114103 angle: 0.000000 volts: 4.000000
+cycle: 23000028 sample: 22 adc: 2180 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.170063 angle: 0.000000 volts: 4.000000
+cycle: 24000028 sample: 23 adc: 2170 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.156739 angle: 0.000000 volts: 4.000000
+cycle: 25000028 sample: 24 adc: 2191 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.184719 angle: 0.000000 volts: 4.000000
+cycle: 26000028 sample: 25 adc: 2162 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.146080 angle: 0.000000 volts: 4.000000
+cycle: 27000028 sample: 26 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 28000028 sample: 27 adc: 2163 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.147412 angle: 0.000000 volts: 4.000000
+cycle: 29000028 sample: 28 adc: 2129 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.102111 angle: 0.000000 volts: 4.000000
+cycle: 30000028 sample: 29 adc: 2162 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.146080 angle: 0.000000 volts: 4.000000
+cycle: 31000028 sample: 30 adc: 2169 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.155407 angle: 0.000000 volts: 4.000000
+cycle: 32000028 sample: 31 adc: 2180 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.170063 angle: 0.000000 volts: 4.000000
+cycle: 33000015 sample: 32 adc: 2150 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.130091 angle: 0.000000 volts: 4.000000
+cycle: 34000014 sample: 33 adc: 2147 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.126094 angle: 0.000000 volts: 4.000000
+cycle: 35000014 sample: 34 adc: 2167 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.152742 angle: 0.000000 volts: 4.000000
+cycle: 36000014 sample: 35 adc: 2103 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.067469 angle: 0.000000 volts: 4.000000
+cycle: 37000014 sample: 36 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 38000014 sample: 37 adc: 2174 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.162069 angle: 0.000000 volts: 4.000000
+cycle: 39000014 sample: 38 adc: 2201 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.198043 angle: 0.000000 volts: 4.000000
+cycle: 40000014 sample: 39 adc: 2153 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.134089 angle: 0.000000 volts: 4.000000
+cycle: 41000018 sample: 40 adc: 2116 eqep: 0 gpio: 48 duty: 100 last-data-req: 40463227 last-cmd: 40535984 amps: -0.084790 angle: 0.000000 volts: 4.000000
+cycle: 11000028 sample: 10 adc: 2158 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.140751 angle: 0.000000 volts: 4.000000
+cycle: 12000028 sample: 11 adc: 2103 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.067469 angle: 0.000000 volts: 4.000000
+cycle: 13000028 sample: 12 adc: 2115 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.083458 angle: 0.000000 volts: 4.000000
+cycle: 14000028 sample: 13 adc: 2176 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.164734 angle: 0.000000 volts: 4.000000
+cycle: 15000028 sample: 14 adc: 2173 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.160736 angle: 0.000000 volts: 4.000000
+cycle: 16000028 sample: 15 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 17000028 sample: 16 adc: 2156 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.138086 angle: 0.000000 volts: 4.000000
+cycle: 18000028 sample: 17 adc: 2147 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.126094 angle: 0.000000 volts: 4.000000
+cycle: 19000028 sample: 18 adc: 2144 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.122097 angle: 0.000000 volts: 4.000000
+cycle: 20000028 sample: 19 adc: 2184 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.175393 angle: 0.000000 volts: 4.000000
+cycle: 21000028 sample: 20 adc: 2123 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.094117 angle: 0.000000 volts: 4.000000
+cycle: 22000028 sample: 21 adc: 2138 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.114103 angle: 0.000000 volts: 4.000000
+cycle: 23000028 sample: 22 adc: 2180 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.170063 angle: 0.000000 volts: 4.000000
+cycle: 24000028 sample: 23 adc: 2170 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0 amps: -0.156739 angle: 0.000000 volts: 4.000000
+
+
+
+
+
+
+
+
+
+//////////
+Also, if you set an int to a wrapped unsigned int, it seems to convert to negative correctly:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/02-gpio-plays-songs# ./test-unsigned-to-signed-int
+ui_minusone: 4294967295 -1 ffffffff
+i_minusone_equals: 4294967295 -1 ffffffff
+i_minusone_pointer: 4294967295 -1 ffffffff
+for loop
+ui_minusone: 3 3 3
+i_minusone_equals: 3 3 3
+i_minusone_pointer: 3 3 3
+ui_minusone: 2 2 2
+i_minusone_equals: 2 2 2
+i_minusone_pointer: 2 2 2
+ui_minusone: 1 1 1
+i_minusone_equals: 1 1 1
+i_minusone_pointer: 1 1 1
+ui_minusone: 0 0 0
+i_minusone_equals: 0 0 0
+i_minusone_pointer: 0 0 0
+ui_minusone: 4294967295 -1 ffffffff
+i_minusone_equals: 4294967295 -1 ffffffff
+i_minusone_pointer: 4294967295 -1 ffffffff
+ui_minusone: 4294967294 -2 fffffffe
+i_minusone_equals: 4294967294 -2 fffffffe
+i_minusone_pointer: 4294967294 -2 fffffffe
+ui_minusone: 4294967293 -3 fffffffd
+i_minusone_equals: 4294967293 -3 fffffffd
+i_minusone_pointer: 4294967293 -3 fffffffd
+ui_minusone: 4294967292 -4 fffffffc
+i_minusone_equals: 4294967292 -4 fffffffc
+i_minusone_pointer: 4294967292 -4 fffffffc
+ui_minusone: 4294967291 -5 fffffffb
+i_minusone_equals: 4294967291 -5 fffffffb
+i_minusone_pointer: 4294967291 -5 fffffffb
+ui_minusone: 4294967290 -6 fffffffa
+i_minusone_equals: 4294967290 -6 fffffffa
+i_minusone_pointer: 4294967290 -6 fffffffa
+
+yay twos-complement.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//////////
+// /home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio/
+
+
+This test showcases the fancy PRU code that:
+1. listens to see if CPU requests data
+2. listens to see if CPU uploaded new actuation schedule
+3. at sample times (5ms), read the adc, eqep, and write the gpios in accordance with the actuation schedule.
+
+Note: don't forget to load the DTOs:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+11: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_eqep1
+12: ff:P-O-L Override Board Name,00A0,Override Manuf,jppprugpio
+
+
+Note: For some reason this test doesn't work if you call eqep_init()
+or eqep_set_period(). Not sure why. The default vals seem to work:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# cat /sys/devices/ocp.3/48302000.epwmss/48302180.eqep/period
+1000000000
+
+Seems likea big #. but what is this number exactly? It's clearly not refresh rate, you can see here it changes every sample:
+
+cycle: 298000024 sample: 297 adc: 2045 eqep: 8704 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+cycle: 299000024 sample: 298 adc: 2045 eqep: 8714 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+cycle: 300000024 sample: 299 adc: 2044 eqep: 8727 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+cycle: 301000024 sample: 300 adc: 2045 eqep: 8740 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+cycle: 302000024 sample: 301 adc: 2046 eqep: 8759 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+cycle: 303000024 sample: 302 adc: 2045 eqep: 8780 gpio: 48 duty: 100 last-data-req: 262686243 last-cmd: 200288986
+
+See the QUPRD register in the TRM, I think this is not acually the number of ns between when the encoder looks at for doing velocity estimation at low speed. 
+
+Should read this part in the TRM whne I've gotten more sleep.
+
+
+Note: this test doesn't do fancy actuator scheduling at certain times. CPU sends x (1 - 32) samples, writes x into a ctrl register, and PRU writes one gpio values once every 5ms.
+
+Note: See the top of adc-eqep-gpio.h file for how I laid out the buffers in the pru0 data ram. It's complicated.
+
+Main concepts: 
+
+- data packet
+  - 8 ints long: cycle time, sample num, adc, eqep, gpio, etc
+- cmd packet
+  - 4 ints long: cycle time, 
+  - only gpio used currently
+- data buffer
+  - 32 data packets
+- cmd buffer
+  - 32 cmd packets
+- PRU Data Buffer
+  - pru writes new value to this (cyclically) every 5ms. 
+- CPU Data Buffer
+  - when CPU asks, PRU copies PRU Data Buffer to CPU Data Buffer, then writes 1 to the (32-bit) PRU Data Ready control register.
+- PRU Cmd Buffer
+  - every 5ms, the PRU writes one of these gpio values to the gpios. 
+  - when it runs out of cmd pkts, oh well. 
+- CPU Cmd Buffer
+  - 32 cmd pkts
+  - CPU decides what it wants the gpios & pwm to do, writes it into the CPU Cmd Buffer, then sets teh CPU New Schedule control register
+- CPU PRU Ctrl Registers
+  - 4 ints at PRU0 Data RAM addr 0
+  - 1-word ctrl regs
+  -  'cpu wants data' 0x0 - 0x3
+  -  'pru data ready' 0x4 - 0x7
+  -  'cpu new sched'  0x8 - 0xB
+  -  'pru ack sched'  0xC - 0xF
+
+
+The basic idea is to have the cpu set a bit high when it wants
+data. The PRU quickly copies the data buffer from its private PRU Data
+Buffer to the CPU Data Buffer, then sets the "data ready" bit.
+
+When the CPU wants to write values to the GPIOs or PWM, it populates
+the CPU Cmd Buffer then writes 1 to teh 'cpu new sched' control
+register.
+
+
+
+What the code actually does
+-----------------------------
+
+Test 1. How long does it take to copy over an cmd schedule?
+
+In principle, if we get data and the last sample is time 10ms, if we
+already have a cmd schedule, we should be able to copy it over to the
+PRU and have the PRU start executing it by the very next timestep at 15ms.
+
+To test that, we do this:
+
+1. cpu asks for data
+
+cycle: 169000022 sample: 168 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 170000022 sample: 169 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+...
+cycle: 198000024 sample: 197 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+
+ (last pkt is sample 199, so hopefully we can get our schedule executed by step 200)
+
+2. cpu copies over cmd sched to PRU
+3. cpu tells pru about new sched. Hopefully we'll see that sample 200 has somethign in 'gpio'.
+4. wait a few ms just to let a couple sample go by.
+5. cpu asks for data again
+
+New data buffer:
+cycle: 171000022 sample: 170 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 172000022 sample: 171 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 173000022 sample: 172 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+...
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 201000029 sample: 200 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 202000026 sample: 201 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 200288949 last-cmd: 200376618
+
+Success! We see 'gpio: 48' at sample 200, meaning that if our ctrl alg
+computation time is fast enough, it will suffer no more than 1-sample
+delay.
+
+Also, note that sample time 200000024, then data req came in at
+(non-sample-time) last-data-req: 200288949, then new cmd sched came in
+at last-cmd: 200376618
+
+1.000000120 sec   sample 199
+1.001444745 sec   data req arrives
+1.001883090 sec   cmd sch arrives
+1.005000145 sec   next sample time
+
+
+That is, it takes a
+
+
+Test 2: OS Preemption
+-----------------------
+
+The following code in adc-... .c shows that OS preemption can cause
+the CPU to lose samples. For example, successive buffers soemtimes
+lose a lot ofsamples in between:
+
+
+cycle: 173000022 sample: 172 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+...
+cycle: 204000022 sample: 203 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 202491093 last-cmd: 200376618
+
+next time data is retrieved, only 2 samples advanced (so CPU did it very fast):
+
+cycle: 176000022 sample: 175 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+...
+cycle: 207000016 sample: 206 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 204717777 last-cmd: 200376618
+
+next time, we're still ok:
+
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+...
+cycle: 231000020 sample: 230 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+
+next time, we missed samples 231 thru 236:
+
+
+cycle: 238000020 sample: 237 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+...
+cycle: 269000022 sample: 268 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+
+next time, we missed samples 269 thru 280:
+
+cycle: 282000022 sample: 281 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+...
+cycle: 313000024 sample: 312 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+
+
+The printfs are probably causing the problem.
+
+
+
+
+Device tree
+-----------------
+
+This should be your DTO:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+17: ff:P-O-L Override Board Name,00A0,Override Manuf,jppprugpio
+
+
+Note: I've got somethign wrong with my DTO, if you load teh bone_eqep1 overlay and run, it hangs the whole BBB.
+
+
+
+Build script
+---------------------
+
+Note: Some weird shit involving different versions of the C standard: POSIX, ISO-C99, GNU99, etc. 
+I wanted to declare a var inside a for loop: for(int i=0; i<4; i++). 
+Error: ‘for’ loop initial declarations are only allowed in C99 mode
+Fix: gcc -std=c99 or -std=gnu99.
+Did gnu99, but now:
+warning: implicit declaration of function ‘usleep’ [-Wimplicit-function-declaration]
+Fix: add
+#define _POSIX_C_SOURCE199309L  // dammit, weird posix stuff. 
+Ugh.
+
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# cat run
+#!/bin/bash
+
+set -e
+
+echo "I'm in: "
+echo `pwd`
+
+echo "NOT building jadcpwmeqep.o"
+# gcc -g -Wall -Werror -pthread -lstdc++ -std=gnu99  -c jadcpwmeqep.c
+
+
+name=adc-eqep-gpio
+binfile=$name.p
+cfile=$name.c
+exename=$(basename $cfile .c)
+
+
+
+echo "Building .bin file $binfile"
+
+pasm -b $binfile
+
+echo "Building .c file $cfile to make $exename"
+
+echo "(Careful - does your .c load the correct .p / .bin?)"
+
+# use -std=c99 to permit for( int i=0
+# without this you get: ‘for’ loop initial declarations are only allowed in C99 mode
+# Or: -std=gnu99 and usleep. gnu99 and nanosleep no work.
+gcc -std=gnu99 -g $cfile jadcpwmeqep.o -o $exename -lprussdrv -lpthread -lrt
+
+echo "Running $exename"
+
+./$exename
+
+
+
+
+
+
+
+Example output:
+----------------------------------
+
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# ./run
+I'm in: 
+/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio
+NOT building jadcpwmeqep.o
+Building .bin file adc-eqep-gpio.p
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 306 word(s)
+
+NOT Building .c file adc-eqep-gpio.c to make adc-eqep-gpio
+(Careful - does your .c load the correct .p / .bin?)
+NOT Running adc-eqep-gpio
+Hey, if you get a seg fault, make sure the jppprugpio device tree overlay has been loaded!!
+Here's the cmd: root@beaglebone:/home/debian/beaglebone_pru_adc/src# echo jppprugpio > /sys/devices/bone_capemgr.9/slots
+Also do this:
+echo bone_eqep1 > $SLOTSNote: I'm using the qQEP sysfs entry:/sys/devices/ocp.3/48302000.epwmss/48302180.eqep, so make sure that exists!!
+Calling constructor...
+[eQEP /sys/devices/ocp.3/48302000.epwmss/48302180.eqep] Unable to open mode for write[eQEP /sys/devices/ocp.3/48302000.epwmss/48302180.eqep] Unable to open position for writeSetting period...
+[eQEP /sys/devices/ocp.3/48302000.epwmss/48302180.eqep] Unable to open period for writePROBLEM: prussdrv_init()
+PROBLEM: prussdrv_open
+PROBLEM: prussdrv_pruintc_init
+pru0 data memory: b6d42000
+About to start PRU, time=
+Main CPU time:     0.000003375 (since last call:     0.000000791) 
+executing bin file: ./adc-eqep-gpio.bin
+Waiting...
+About to set "CPU Want data" bit, time=
+Main CPU time:     1.001874167 (since last call:     1.001870792) 
+Waiting for "Data ready" bit...
+Got it! Time:
+Main CPU time:     1.002110250 (since last call:     0.000236083) 
+Copying cmd to PRU data ram, time=
+Main CPU time:     1.002236459 (since last call:     0.000126209) 
+Done copying, time=
+Main CPU time:     1.002383667 (since last call:     0.000147208) 
+Waiting until pru says he copied over the new schedule...time=
+Main CPU time:     1.002502792 (since last call:     0.000119125) 
+He got it! time=
+Main CPU time:     1.002615584 (since last call:     0.000112792) 
+Waiting for "Data ready" bit...
+Got it!
+Old data buffer:
+cycle: 169000022 sample: 168 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 170000022 sample: 169 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 171000022 sample: 170 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 172000022 sample: 171 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 173000022 sample: 172 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 174000022 sample: 173 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 175000022 sample: 174 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 176000022 sample: 175 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 182000022 sample: 181 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 183000022 sample: 182 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 184000022 sample: 183 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 185000022 sample: 184 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 186000022 sample: 185 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 187000022 sample: 186 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 188000022 sample: 187 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 189000022 sample: 188 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 190000022 sample: 189 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+New data buffer:
+cycle: 171000022 sample: 170 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 172000022 sample: 171 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 173000022 sample: 172 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 174000022 sample: 173 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 175000022 sample: 174 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 176000022 sample: 175 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 182000022 sample: 181 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 183000022 sample: 182 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 184000022 sample: 183 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 185000022 sample: 184 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 186000022 sample: 185 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 187000022 sample: 186 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 188000022 sample: 187 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 189000022 sample: 188 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 190000022 sample: 189 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 201000029 sample: 200 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 202000026 sample: 201 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 200288949 last-cmd: 200376618
+Here's the data buffer a few more times, just to show it's flushing:
+Setting "CPU Wants" bit, time=
+Main CPU time:     1.023989792 (since last call:     0.021374208) 
+Waiting for "Data ready" bit, time=
+Main CPU time:     1.024301375 (since last call:     0.000311583) 
+Got it! time=
+Main CPU time:     1.024568625 (since last call:     0.000267250) 
+Copy over the new data buf, time=
+Main CPU time:     1.024899834 (since last call:     0.000331209) 
+Done! time=
+Main CPU time:     1.025288459 (since last call:     0.000388625) 
+Printing Data buffer (iter 0) time=:
+Main CPU time:     1.025503709 (since last call:     0.000215250) 
+cycle: 173000022 sample: 172 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 174000022 sample: 173 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 175000022 sample: 174 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 176000022 sample: 175 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 182000022 sample: 181 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 183000022 sample: 182 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 184000022 sample: 183 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 185000022 sample: 184 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 186000022 sample: 185 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 187000022 sample: 186 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 188000022 sample: 187 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 189000022 sample: 188 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 190000022 sample: 189 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 201000029 sample: 200 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 202000026 sample: 201 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 203000024 sample: 202 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 202491093 last-cmd: 200376618
+cycle: 204000022 sample: 203 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 202491093 last-cmd: 200376618
+Sleeping for 10ms, time=
+Main CPU time:     1.029299625 (since last call:     0.003795916) 
+Awake! time=
+Main CPU time:     1.039686375 (since last call:     0.010386750) 
+Setting "CPU Wants" bit, time=
+Main CPU time:     1.039842375 (since last call:     0.000156000) 
+Waiting for "Data ready" bit, time=
+Main CPU time:     1.145903375 (since last call:     0.106061000) 
+Got it! time=
+Main CPU time:     1.146188959 (since last call:     0.000285584) 
+Copy over the new data buf, time=
+Main CPU time:     1.146311042 (since last call:     0.000122083) 
+Done! time=
+Main CPU time:     1.146538792 (since last call:     0.000227750) 
+Printing Data buffer (iter 1) time=:
+Main CPU time:     1.146649125 (since last call:     0.000110333) 
+cycle: 176000022 sample: 175 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 177000022 sample: 176 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 178000022 sample: 177 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 179000022 sample: 178 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 180000022 sample: 179 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 181000022 sample: 180 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 182000022 sample: 181 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 183000022 sample: 182 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 184000022 sample: 183 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 185000022 sample: 184 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 186000022 sample: 185 adc: 2046 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 187000022 sample: 186 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 188000022 sample: 187 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 189000022 sample: 188 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 190000022 sample: 189 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 191000022 sample: 190 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 192000022 sample: 191 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 193000025 sample: 192 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 194000024 sample: 193 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 195000024 sample: 194 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 196000024 sample: 195 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 197000024 sample: 196 adc: 2044 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 198000024 sample: 197 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 199000024 sample: 198 adc: 2043 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 201000029 sample: 200 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 202000026 sample: 201 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 203000024 sample: 202 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 202491093 last-cmd: 200376618
+cycle: 204000022 sample: 203 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 202491093 last-cmd: 200376618
+cycle: 205000020 sample: 204 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 204717777 last-cmd: 200376618
+cycle: 206000018 sample: 205 adc: 2045 eqep: 0 gpio: 6f duty: 100 last-data-req: 204717777 last-cmd: 200376618
+cycle: 207000016 sample: 206 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 204717777 last-cmd: 200376618
+Sleeping for 10ms, time=
+Main CPU time:     1.149013167 (since last call:     0.002364042) 
+Awake! time=
+Main CPU time:     1.159430709 (since last call:     0.010417542) 
+Setting "CPU Wants" bit, time=
+Main CPU time:     1.159697334 (since last call:     0.000266625) 
+Waiting for "Data ready" bit, time=
+Main CPU time:     1.159833500 (since last call:     0.000136166) 
+Got it! time=
+Main CPU time:     1.159948042 (since last call:     0.000114542) 
+Copy over the new data buf, time=
+Main CPU time:     1.160062792 (since last call:     0.000114750) 
+Done! time=
+Main CPU time:     1.160278834 (since last call:     0.000216042) 
+Printing Data buffer (iter 2) time=:
+Main CPU time:     1.160384125 (since last call:     0.000105291) 
+cycle: 200000024 sample: 199 adc: 2045 eqep: 0 gpio: 0 duty: 100 last-data-req: 0 last-cmd: 0
+cycle: 201000029 sample: 200 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 202000026 sample: 201 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 200288949 last-cmd: 200376618
+cycle: 203000024 sample: 202 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 202491093 last-cmd: 200376618
+cycle: 204000022 sample: 203 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 202491093 last-cmd: 200376618
+cycle: 205000020 sample: 204 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 204717777 last-cmd: 200376618
+cycle: 206000018 sample: 205 adc: 2045 eqep: 0 gpio: 6f duty: 100 last-data-req: 204717777 last-cmd: 200376618
+cycle: 207000016 sample: 206 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 204717777 last-cmd: 200376618
+cycle: 208000014 sample: 207 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 209000028 sample: 208 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 210000026 sample: 209 adc: 2048 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 211000024 sample: 210 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 212000022 sample: 211 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 213000020 sample: 212 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 214000018 sample: 213 adc: 2048 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 215000016 sample: 214 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 216000014 sample: 215 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 217000028 sample: 216 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 218000026 sample: 217 adc: 2048 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 219000024 sample: 218 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 220000022 sample: 219 adc: 2044 eqep: 0 gpio: 6f duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 221000020 sample: 220 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 222000018 sample: 221 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 223000018 sample: 222 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 224000018 sample: 223 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 225000021 sample: 224 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 226000020 sample: 225 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 227000020 sample: 226 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 228000020 sample: 227 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 229000020 sample: 228 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 230000020 sample: 229 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+cycle: 231000020 sample: 230 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 207868347 last-cmd: 200376618
+Sleeping for 10ms, time=
+Main CPU time:     1.338194959 (since last call:     0.177810834) 
+Awake! time=
+Main CPU time:     1.348578959 (since last call:     0.010384000) 
+Setting "CPU Wants" bit, time=
+Main CPU time:     1.348752917 (since last call:     0.000173958) 
+Waiting for "Data ready" bit, time=
+Main CPU time:     1.348872834 (since last call:     0.000119917) 
+Got it! time=
+Main CPU time:     1.348986709 (since last call:     0.000113875) 
+Copy over the new data buf, time=
+Main CPU time:     1.349183709 (since last call:     0.000197000) 
+Done! time=
+Main CPU time:     1.349411334 (since last call:     0.000227625) 
+Printing Data buffer (iter 3) time=:
+Main CPU time:     1.349518917 (since last call:     0.000107583) 
+cycle: 238000020 sample: 237 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 239000020 sample: 238 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 240000020 sample: 239 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 241000020 sample: 240 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 242000020 sample: 241 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 243000020 sample: 242 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 244000020 sample: 243 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 245000020 sample: 244 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 246000020 sample: 245 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 247000020 sample: 246 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 248000020 sample: 247 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 249000020 sample: 248 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 250000020 sample: 249 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 251000020 sample: 250 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 252000020 sample: 251 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 253000020 sample: 252 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 254000020 sample: 253 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 255000020 sample: 254 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 256000020 sample: 255 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 257000023 sample: 256 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 258000022 sample: 257 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 259000022 sample: 258 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 260000022 sample: 259 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 261000022 sample: 260 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 262000022 sample: 261 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 263000022 sample: 262 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 264000022 sample: 263 adc: 2047 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 265000022 sample: 264 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 266000022 sample: 265 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 267000022 sample: 266 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 268000022 sample: 267 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+cycle: 269000022 sample: 268 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 231842465 last-cmd: 200376618
+Sleeping for 10ms, time=
+Main CPU time:     1.556971875 (since last call:     0.207452958) 
+Awake! time=
+Main CPU time:     1.567352334 (since last call:     0.010380459) 
+Setting "CPU Wants" bit, time=
+Main CPU time:     1.567535292 (since last call:     0.000182958) 
+Waiting for "Data ready" bit, time=
+Main CPU time:     1.567654834 (since last call:     0.000119542) 
+Got it! time=
+Main CPU time:     1.567767500 (since last call:     0.000112666) 
+Copy over the new data buf, time=
+Main CPU time:     1.567961667 (since last call:     0.000194167) 
+Done! time=
+Main CPU time:     1.568186375 (since last call:     0.000224708) 
+Printing Data buffer (iter 4) time=:
+Main CPU time:     1.568295542 (since last call:     0.000109167) 
+cycle: 282000022 sample: 281 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 283000022 sample: 282 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 284000022 sample: 283 adc: 2048 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 285000022 sample: 284 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 286000022 sample: 285 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 287000022 sample: 286 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 288000022 sample: 287 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 289000025 sample: 288 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 290000024 sample: 289 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 291000024 sample: 290 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 292000024 sample: 291 adc: 2043 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 293000024 sample: 292 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 294000024 sample: 293 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 295000024 sample: 294 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 296000024 sample: 295 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 297000024 sample: 296 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 298000024 sample: 297 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 299000024 sample: 298 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 300000024 sample: 299 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 301000024 sample: 300 adc: 2046 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 302000024 sample: 301 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 303000024 sample: 302 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 304000024 sample: 303 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 305000024 sample: 304 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 306000024 sample: 305 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 307000024 sample: 306 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 308000024 sample: 307 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 309000024 sample: 308 adc: 2044 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 310000024 sample: 309 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 311000024 sample: 310 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 312000024 sample: 311 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+cycle: 313000024 sample: 312 adc: 2045 eqep: 0 gpio: 48 duty: 100 last-data-req: 269651027 last-cmd: 200376618
+Sleeping for 10ms, time=
+Main CPU time:     1.767765834 (since last call:     0.199470292) 
+Awake! time=
+Main CPU time:     1.778142334 (since last call:     0.010376500) 
+Shutting down.
+root@beaglebone:/home/debian/BB_PRU_stuff/Integration-test/01-adc-eqep-gpio# 
+

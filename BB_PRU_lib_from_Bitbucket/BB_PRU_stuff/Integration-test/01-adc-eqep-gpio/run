@@ -1,0 +1,35 @@
+#!/bin/bash
+
+set -e
+
+echo "I'm in: "
+echo `pwd`
+
+echo " building jadcpwmeqep.o"
+gcc -std=gnu99 -g -Wall -Werror -pthread -lstdc++ -std=gnu99  -c jadcpwmeqep.c
+
+
+name=adc-eqep-gpio
+binfile=$name.p
+cfile=$name.c
+exename=$(basename $cfile .c)
+
+
+
+echo "Building .bin file $binfile"
+
+pasm -b $binfile
+
+echo "Building .c file $cfile to make $exename"
+
+echo "(Careful - does your .c load the correct .p / .bin?)"
+
+# use -std=c99 to permit for( int i=0
+# without this you get: ‘for’ loop initial declarations are only allowed in C99 mode
+# Or: -std=gnu99 and usleep. gnu99 and nanosleep no work.
+gcc -std=gnu99 -g $cfile jadcpwmeqep.o -o $exename -lprussdrv -lpthread -lrt
+
+echo "NOT Running $exename"
+
+#./$exename
+

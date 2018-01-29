@@ -1,0 +1,3 @@
+this file samples the ADC channel 0 (P9_39) once. You can measure it with a voltage divider between the 1.8V adc rail (P9_32) and the adc ground (P9_34):
+
+

@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "Building .p"
+
+pasm -b pru-set-pwm.p
+
+# echo "Building .c"
+
+# gcc squarewave.c -o squarewave -lprussdrv
+
+# echo "Running .c"
+
+# ./squarewave
+

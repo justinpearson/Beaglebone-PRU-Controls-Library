@@ -1,0 +1,26 @@
+#!/bin/bash
+
+set -e
+
+name=eqep-cmp-to-sysfs
+binfile=$name.p
+cfile=$name.c
+exename=$(basename $cfile .c)
+
+echo "Building .bin file $binfile"
+
+pasm -b $binfile
+
+echo "Building .c file $cfile to make $exename"
+
+echo "(Careful - does your .c load the correct .p / .bin?)"
+
+gcc -g -Wall -Werror -pthread -lstdc++ -std=gnu99  -c jadcpwmeqep.c
+
+# gcc -g PRUClock-j2.c -o pruclock-j2 -lpthread -lprussdrv
+gcc -g $cfile jadcpwmeqep.o -o $exename -lprussdrv -lpthread
+
+echo "Running $exename"
+
+./$exename
+

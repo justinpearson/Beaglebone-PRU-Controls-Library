@@ -1,0 +1,917 @@
+This program square-waves a GPIO. The GPIO pins are here:
+
+               0x1a4 0x05  // P9_27 pr1_pru0_pru_r30_5, MODE5 | OUTPUT | PRU
+// jpp new:
+               0x194 0x05  // P9_29 pr1_pru0_pru_r30_1, MODE5 | OUTPUT | PRU
+               0x198 0x05  // P9_30 pr1_pru0_pru_r30_2, MODE5 | OUTPUT | PRU
+               0x190 0x05  // P9_31 pr1_pru0_pru_r30_0, MODE5 | OUTPUT | PRU
+
+I edited ledButton.p to toggle a pin, verified sq wave w oscope, then edited .p to a different pin, repeat.
+
+In .p, refer to pins as r30.t0, r30.t1, r30.t2, r30.t5.
+
+
+
+
+
+Device Tree Overlay to enable extra GPIOS
+-------------------------------------------
+
+
+Note: the jppprugpio DTO must have been loaded, ie, you need to see 'jppprugpio' in cat $SLOTS.
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+17: ff:P-O-L Override Board Name,00A0,Override Manuf,jppprugpio       <------- here it is
+
+
+If not, do 
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# echo jppprugpio > $SLOTS
+
+and verify:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# dmesg | tail
+[ 5753.774407] bone-capemgr bone_capemgr.9: slot #17: generic override
+[ 5753.774453] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 17
+[ 5753.774502] bone-capemgr bone_capemgr.9: slot #17: 'Override Board Name,00A0,Override Manuf,jppprugpio'
+[ 5753.775014] bone-capemgr bone_capemgr.9: slot #17: Requesting part number/version based 'jppprugpio-00A0.dtbo
+[ 5753.775068] bone-capemgr bone_capemgr.9: slot #17: Requesting firmware 'jppprugpio-00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[ 5753.775437] bone-capemgr bone_capemgr.9: slot #17: dtbo 'jppprugpio-00A0.dtbo' loaded; converting to live tree
+[ 5753.776397] bone-capemgr bone_capemgr.9: slot #17: #3 overlays
+[ 5753.796757] omap_hwmod: pruss: failed to hardreset
+[ 5753.808339] gpio-of-helper gpio_helper.14: ready
+[ 5753.808537] bone-capemgr bone_capemgr.9: slot #17: Applied #3 overlays.
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+17: ff:P-O-L Override Board Name,00A0,Override Manuf,jppprugpio
+
+
+If not, maybe need to compile it fresh:
+
+Compile:
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/bash
+
+echo "Compiling the overlay from .dts to .dtbo"
+
+dtc -O dtb -o jppprugpio-00A0.dtbo -b 0 -@ EBB-PRU-Example-w-extra-gpio.dts
+
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp jppprugpio-00A0.dtbo /lib/firmware
+
+Now try echo jppprugpio > $SLOTS again.
+
+
+Note: keep the names of the DTO in the .dts file short, and keep the name of the dtbo short too. Else the load will fail :(
+
+
+
+
+Example output:
+-----------------
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 148
+ 4 -rw-r--r-- 1 root root  1800 Apr 29 17:03 EBB-PRU-Example.orig.dts
+ 4 -rw-r--r-- 1 root root  1314 Apr 29 18:14 EBB-PRU-Example-jpp-00A0.dtbo
+ 4 -rw-r--r-- 1 root root  2075 Apr 29 18:18 EBB-PRU-Example-w-extra-gpio.dts~
+ 4 -rwxr-xr-x 1 root root   147 Apr 29 18:18 build~
+ 4 -rw-r--r-- 1 root root  1314 Apr 29 18:18 jpp-EBB-PRU-Example-00A0.dtbo
+ 4 -rw-r--r-- 1 root root  2066 Apr 29 18:41 EBB-PRU-Example-w-extra-gpio.dts
+ 4 -rw-r--r-- 1 root root  1306 Apr 29 18:41 jppprugpio-00A0.dtbo
+52 -rw-r--r-- 1 root root 49727 Apr 29 18:46 readme.txt~
+52 -rw-r--r-- 1 root root 50728 Apr 29 18:49 readme.txt
+ 4 -rwxr-xr-x 1 root root    80 Apr 29 18:51 build
+ 4 -rw-r--r-- 1 root root  1312 Apr 29 18:51 ledButton.c
+ 4 -rw-r--r-- 1 root root  1459 Apr 29 18:51 ledButton.p
+ 4 -rw-r--r-- 1 root root  1459 Apr 29 18:51 ledButton.orig.p
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/sh
+pasm -b ledButton.p
+gcc ledButton.c -o ledButton -lpthread -lprussdrv
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 13 word(s)
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./ledButton
+  C-c C-c
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # That was r30.t5 (P9_27)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Now for P9_29, r30_1:
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# diff ledButton.p ledButton.orig.p 
+17c17
+< 	SET	r30.t1           // turn on the output pin (LED on)
+---
+> 	SET	r30.t5           // turn on the output pin (LED on)
+23c23
+< 	CLR	r30.t1           // clear the output bin (LED off)
+---
+> 	CLR	r30.t5           // clear the output bin (LED off)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 13 word(s)
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./ledButton
+  C-c C-c
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # see a 10Hz square wave on P9_29
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Good. 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Now for P9_30 (r30_2)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# !diff
+diff ledButton.p ledButton.orig.p 
+17c17
+< 	SET	r30.t2           // turn on the output pin (LED on)
+---
+> 	SET	r30.t5           // turn on the output pin (LED on)
+23c23
+< 	CLR	r30.t2           // clear the output bin (LED off)
+---
+> 	CLR	r30.t5           // clear the output bin (LED off)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 13 word(s)
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./ledButton
+  C-c C-c
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # See 10hz square on P9_30 (good)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # oscope to P9_31
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # see 0V
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # edit ledButton.p
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# !diff
+diff ledButton.p ledButton.orig.p 
+17c17
+< 	SET	r30.t0           // turn on the output pin (LED on)
+---
+> 	SET	r30.t5           // turn on the output pin (LED on)
+23c23
+< 	CLR	r30.t0           // clear the output bin (LED off)
+---
+> 	CLR	r30.t5           // clear the output bin (LED off)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+
+
+PRU Assembler Version 0.84
+Copyright (C) 2005-2013 by Texas Instruments Inc.
+
+
+Pass 2 : 0 Error(s), 0 Warning(s)
+
+Writing Code Image of 13 word(s)
+
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./ledButton
+  C-c C-c
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # see 10Hz square on P9_31 (good)
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Done wiht test.
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Note that P9_31 is still square wave bc PRU is still running, fine.
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # Note: P9_30, 29, 27 are either 0 or 3.3V, fine.
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# 
+
+
+
+
+Terminal trace of figuring this DTO shit out
+-----------------------------------------------
+
+2016-08-29 09:59:45 [roseline@roseline-controller-2 ~] 
+$ ssh debian@10.42.0.122
+Debian GNU/Linux 7
+
+BeagleBoard.org BeagleBone Debian Image 2014-04-23
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+debian@10.42.0.122's password: 
+Last login: Sat Apr 26 22:15:55 2014 from roseline-controller-2.local
+debian@beaglebone:~$ sudo su
+root@beaglebone:/home/debian# cd BB_PRU_stuff/EQEP/01-Read-eqep-once/
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# ls
+eqep-hello-world      eqep-hello-world.c   eqep-hello-world.p	  readme.txt   run
+eqep-hello-world.bin  eqep-hello-world.c~  eqep-hello-world.p~	  readme.txt~  run~
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/01-Read-eqep-once# cd ../02-eqep-cmp-to-sysfs/
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/02-eqep-cmp-to-sysfs# ls
+eqep-hello-world      eqep-hello-world.c   eqep-hello-world.p	     jadcpwmeqep.c  jadcpwmeqep.o	readme.txt   run
+eqep-hello-world.bin  eqep-hello-world.c~  eqep-hello-world.p~	     jadcpwmeqep.h  jpp_test_eqep.c	readme.txt~  run~
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/02-eqep-cmp-to-sysfs# emacs
+root@beaglebone:/home/debian/BB_PRU_stuff/EQEP/02-eqep-cmp-to-sysfs# cd ../../
+root@beaglebone:/home/debian/BB_PRU_stuff# mkdir Integration-test
+root@beaglebone:/home/debian/BB_PRU_stuff# ls
+ADC  EQEP  GPIO  Integration-test  on-bb-notes.md  on-bb-notes.md~  PWM  Timing
+root@beaglebone:/home/debian/BB_PRU_stuff# cd GPIO/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+11: ff:P-O-L Override Board Name,00A0,Override Manuf,EBB-PRU-Example
+12: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_eqep1
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp /home/debian/exploringBB/chp13/overlay/
+build                      EBB-PRU-Example-00A0.dtbo  EBB-PRU-Example.dts        
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp /home/debian/exploringBB/chp13/overlay/* .
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build  EBB-PRU-Example-00A0.dtbo  EBB-PRU-Example.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# mv EBB-PRU-Example.dts EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs build 
+
+[1]+  Stopped                 emacs build
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# fg
+emacs build
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# rm EBB-PRU-Example-00A0.dtbo 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build  build~  EBB-PRU-Example-w-extra-gpio.dts  EBB-PRU-Example-w-gpios-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp EBB-PRU-Example-w-gpios-00A0.dtbo /lib/firmware/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# rm /lib/firmware/EBB-PRU-Example-w-gpios-00A0.dtbo 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example-w-extra-gpio.dts 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build  build~  EBB-PRU-Example-w-extra-gpio.dts  EBB-PRU-Example-w-extra-gpio.dts~  EBB-PRU-Example-w-gpios-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp /home/debian/exploringBB/chp13/overlay/*.dts .
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build						EBB-PRU-Example.dts		  EBB-PRU-Example-w-extra-gpio.dts~
+build~						EBB-PRU-Example-w-extra-gpio.dts  EBB-PRU-Example-w-gpios-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 24
+4 -rwxr-xr-x 1 root root  130 Apr 29 16:56 build~
+4 -rw-r--r-- 1 root root 1800 Apr 29 16:56 EBB-PRU-Example-w-extra-gpio.dts~
+4 -rwxr-xr-x 1 root root  151 Apr 29 16:57 build
+4 -rw-r--r-- 1 root root 1270 Apr 29 16:57 EBB-PRU-Example-w-gpios-00A0.dtbo
+4 -rw-r--r-- 1 root root 2071 Apr 29 17:02 EBB-PRU-Example-w-extra-gpio.dts
+4 -rw-r--r-- 1 root root 1800 Apr 29 17:03 EBB-PRU-Example.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# diff EBB-PRU-Example.dts EBB-PRU-Example-w-extra-gpio.dts
+19c19
+<          "P9.11", "P9.13", "P9.27", "P9.28", "pru0";
+---
+>          "P9.11", "P9.13", "P9.27", "P9.28", "P9.29", "P9.30", "P9.31", "pru0";
+34a35,39
+> // jpp new:
+>                0x194 0x05  // P9_29 pr1_pru0_pru_r30_1, MODE5 | OUTPUT | PRU
+>                0x198 0x05  // P9_30 pr1_pru0_pru_r30_2, MODE5 | OUTPUT | PRU
+>                0x190 0x05  // P9_31 pr1_pru0_pru_r30_0, MODE5 | OUTPUT | PRU
+> 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/bash
+
+echo "Compiling the overlay from .dts to .dtbo"
+
+dtc -O dtb -o EBB-PRU-Example-w-gpios-00A0.dtbo -b 0 -@ EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 24
+4 -rwxr-xr-x 1 root root  130 Apr 29 16:56 build~
+4 -rw-r--r-- 1 root root 1800 Apr 29 16:56 EBB-PRU-Example-w-extra-gpio.dts~
+4 -rwxr-xr-x 1 root root  151 Apr 29 16:57 build
+4 -rw-r--r-- 1 root root 2071 Apr 29 17:02 EBB-PRU-Example-w-extra-gpio.dts
+4 -rw-r--r-- 1 root root 1800 Apr 29 17:03 EBB-PRU-Example.dts
+4 -rw-r--r-- 1 root root 1310 Apr 29 17:03 EBB-PRU-Example-w-gpios-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp EBB-PRU-Example-w-gpios-00A0.dtbo /lib/firmware/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# echo $SLOTS
+/sys/devices/bone_capemgr.9/slots
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+11: ff:P-O-L Override Board Name,00A0,Override Manuf,EBB-PRU-Example
+12: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_eqep1
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# # unloading sometimes kills it, just reboot instead.
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# fg
+bash: fg: current: no such job
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# reboot
+
+Broadcast message from root@beaglebone (pts/0) (Tue Apr 29 17:05:54 2014):
+The system is going down for reboot NOW!
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# 
+Session terminated, terminating shell...debian@beaglebone:~$ Connection to 10.42.0.122 closed by remote host.
+Connection to 10.42.0.122 closed.
+2016-08-29 11:29:54 [roseline@roseline-controller-2 ~] 
+$ 
+2016-08-29 11:29:54 [roseline@roseline-controller-2 ~] 
+$ 
+2016-08-29 11:29:54 [roseline@roseline-controller-2 ~] 
+$ ssh debian@10.42.0.122
+Debian GNU/Linux 7
+
+BeagleBoard.org BeagleBone Debian Image 2014-04-23
+
+Support/FAQ: http://elinux.org/Beagleboard:BeagleBoneBlack_Debian
+debian@10.42.0.122's password: 
+Last login: Tue Apr 29 15:35:52 2014 from roseline-controller-2.local
+debian@beaglebone:~$ sudo su
+root@beaglebone:/home/debian# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+root@beaglebone:/home/debian# echo EBB-PRU-Example-w-gpios > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/home/debian# ls -lstr /lib/firmware | tail
+  4 -rw-r--r-- 1 root root   1181 Apr 23 20:57 am33xx_pwm-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART5-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART4-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART2-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1115 Apr 23 21:02 ADAFRUIT-SPI1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1042 Apr 23 21:02 ADAFRUIT-SPI0-00A0.dtbo
+  4 -rw-r--r-- 1 root root    898 Apr 23 23:00 jpp-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1310 Apr 29 17:04 EBB-PRU-Example-w-gpios-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1096 Aug 23  2016 bone_eqep1-00A0.dtbo
+root@beaglebone:/home/debian# echo $SLOTS
+/sys/devices/bone_capemgr.9/slots
+root@beaglebone:/home/debian# dmesg | tail
+[   32.320719] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
+[   34.310692] libphy: 4a101000.mdio:00 - Link is Up - 100/Full
+[   34.310808] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
+[   68.455828] bone-capemgr bone_capemgr.9: part_number 'EBB-PRU-Example-w-gpios', version 'N/A'
+[   68.456016] bone-capemgr bone_capemgr.9: slot #11: generic override
+[   68.456061] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 11
+[   68.456110] bone-capemgr bone_capemgr.9: slot #11: 'Override Board Name,00A0,Override Manuf,EBB-PRU-Example-'
+[   68.456613] bone-capemgr bone_capemgr.9: slot #11: Requesting part number/version based 'EBB-PRU-Example--00A0.dtbo
+[   68.456667] bone-capemgr bone_capemgr.9: slot #11: Requesting firmware 'EBB-PRU-Example--00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[   68.497632] bone-capemgr bone_capemgr.9: failed to load firmware 'EBB-PRU-Example--00A0.dtbo'
+root@beaglebone:/home/debian# echo EBB-PRU-Example-w-gpios > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/home/debian# mv /lib/firmware/// eQEP register offsets from its base IO address
+mv: target `address' is not a directory
+root@beaglebone:/home/debian# #define QPOSCNT    0x0000
+root@beaglebone:/home/debian# #define QPOSINIT 0x0004^C
+root@beaglebone:/home/debian# ^C
+root@beaglebone:/home/debian# ^C
+root@beaglebone:/home/debian# mv /lib/firmware/EBB-PRU-Example-w-gpios-00A0.dtbo /lib/firmware/EBB-PRU-Example-jpp-00A0.dtbo
+root@beaglebone:/home/debian# echo EBB-PRU-Example-jpp > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/home/debian# dmesg | tail
+[  133.203802] bone-capemgr bone_capemgr.9: slot #12: Requesting part number/version based 'EBB-PRU-Example--00A0.dtbo
+[  133.203851] bone-capemgr bone_capemgr.9: slot #12: Requesting firmware 'EBB-PRU-Example--00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[  133.240130] bone-capemgr bone_capemgr.9: failed to load firmware 'EBB-PRU-Example--00A0.dtbo'
+[  192.928854] bone-capemgr bone_capemgr.9: part_number 'EBB-PRU-Example-jpp', version 'N/A'
+[  192.929194] bone-capemgr bone_capemgr.9: slot #13: generic override
+[  192.929243] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 13
+[  192.929292] bone-capemgr bone_capemgr.9: slot #13: 'Override Board Name,00A0,Override Manuf,EBB-PRU-Example-'
+[  192.929549] bone-capemgr bone_capemgr.9: slot #13: Requesting part number/version based 'EBB-PRU-Example--00A0.dtbo
+[  192.929597] bone-capemgr bone_capemgr.9: slot #13: Requesting firmware 'EBB-PRU-Example--00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[  192.964969] bone-capemgr bone_capemgr.9: failed to load firmware 'EBB-PRU-Example--00A0.dtbo'
+root@beaglebone:/home/debian# # ???
+root@beaglebone:/home/debian# ls
+BB_PRU_stuff  beaglebone_pru_adc  Desktop  devmem  exploringBB	prudebug-0.25  prudebug-0.25.tar
+root@beaglebone:/home/debian# cd BB_PRU_stuff/GPIO/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build						EBB-PRU-Example.dts		  EBB-PRU-Example-w-extra-gpio.dts~
+build~						EBB-PRU-Example-w-extra-gpio.dts  EBB-PRU-Example-w-gpios-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example.dts 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# mv EBB-PRU-Example.dts EBB-PRU-Example.orig.dts 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls *.dts
+EBB-PRU-Example.orig.dts  EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# diff *.dts
+14c14
+<    part-number = "EBB-PRU-Example";
+---
+>    part-number = "EBB-PRU-Example-jpp";
+19c19
+<          "P9.11", "P9.13", "P9.27", "P9.28", "pru0";
+---
+>          "P9.11", "P9.13", "P9.27", "P9.28", "P9.29", "P9.30", "P9.31", "pru0";
+34a35,39
+> // jpp new:
+>                0x194 0x05  // P9_29 pr1_pru0_pru_r30_1, MODE5 | OUTPUT | PRU
+>                0x198 0x05  // P9_30 pr1_pru0_pru_r30_2, MODE5 | OUTPUT | PRU
+>                0x190 0x05  // P9_31 pr1_pru0_pru_r30_0, MODE5 | OUTPUT | PRU
+> 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs build
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/bash
+
+echo "Compiling the overlay from .dts to .dtbo"
+
+dtc -O dtb -o EBB-PRU-Example-jpp-00A0.dtbo -b 0 -@ EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 28
+4 -rwxr-xr-x 1 root root  151 Apr 29 16:57 build~
+4 -rw-r--r-- 1 root root 2071 Apr 29 17:02 EBB-PRU-Example-w-extra-gpio.dts~
+4 -rw-r--r-- 1 root root 1800 Apr 29 17:03 EBB-PRU-Example.orig.dts
+4 -rw-r--r-- 1 root root 1310 Apr 29 17:03 EBB-PRU-Example-w-gpios-00A0.dtbo
+4 -rw-r--r-- 1 root root 2075 Apr 29 18:13 EBB-PRU-Example-w-extra-gpio.dts
+4 -rwxr-xr-x 1 root root  147 Apr 29 18:14 build
+4 -rw-r--r-- 1 root root 1314 Apr 29 18:14 EBB-PRU-Example-jpp-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# date
+Tue Apr 29 18:14:41 UTC 2014
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# history | grep -i date
+  488  date
+  526  date
+  527  history | grep -i date
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp EBB-PRU-Example-jpp-00A0.dtbo /lib/firmware/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cd /lib/firmware
+root@beaglebone:/lib/firmware# ls
+ADAFRUIT-SPI0-00A0.dtbo		    BB-BONE-GPEVT-00A0.dtbo    bone_pwm_P9_16-00A0.dtbo		 carl9170-1.fw
+ADAFRUIT-SPI1-00A0.dtbo		    			           BB-BONE-GPS-00A0.dtbo      bone_pwm_P9_21-00A0.dtbo	  DNIL-AMPCAPE-1-00R1.dtbo
+ADAFRUIT-UART1-00A0.dtbo					       BB-BONE-LCD4-01-00A0.dtbo  bone_pwm_P9_22-00A0.dtbo   EBB-PRU-Example-00A0.dtbo
+ADAFRUIT-UART2-00A0.dtbo					           BB-BONE-LCD4-01-00A1.dtbo  bone_pwm_P9_28-00A0.dtbo   EBB-PRU-Example-jpp-00A0.dtbo
+ADAFRUIT-UART4-00A0.dtbo						       BB-BONE-LCD7-01-00A2.dtbo  bone_pwm_P9_29-00A0.dtbo   htc_9271.fw
+ADAFRUIT-UART5-00A0.dtbo						           BB-BONE-LCD7-01-00A3.dtbo  bone_pwm_P9_31-00A0.dtbo   jpp-00A0.dtbo
+am335x-pm-firmware.bin								   			          BB-BONE-LCD7-01-00A4.dtbo  bone_pwm_P9_42-00A0.dtbo   lbtf_usb.bin
+am33xx_pwm-00A0.dtbo												  			         BB-BONELT-BT-00A0.dtbo     brcm     libertas
+atmel_at76c502_3com.bin																 			        BB-BONE-PRU-01-00A0.dtbo   cape-bebopr-brdg-R2.dtbo   libertas_cs.fw
+atmel_at76c502_3com-wpa.bin																			    BB-BONE-PRU-02-00A0.dtbo   cape-bebopr-ena-R2.dtbo   libertas_cs_helper.fw
+atmel_at76c502.bin																				    			           BB-BONE-PRU-03-00A0.dtbo   cape-bebopr-R2.dtbo   LICENCE.atheros_firmware
+atmel_at76c502d.bin																								   			          BB-BONE-PRU-04-00A0.dtbo   cape-bone-2g-emmc1.dtbo   LICENCE.broadcom_bcm43xx
+atmel_at76c502d-wpa.bin																												  			         BB-BONE-PWMT-00A0.dtbo     cape-bone-adafruit-lcd-00A0.dtbo  LICENCE.rtlwifi_firmware.txt
+atmel_at76c502e.bin																																 			        BB-BONE-RS232-00A0.dtbo    cape-bone-argus-00A0.dtbo  LICENCE.ti-connectivity
+atmel_at76c502e-wpa.bin																																							       BB-BONE-RST-00A0.dtbo      cape-boneblack-hdmi-00A0.dtbo  mwl8k
+atmel_at76c502-wpa.bin																																							       				      BB-BONE-RST2-00A0.dtbo     cape-boneblack-hdmin-00A0.dtbo  rt2561.bin
+atmel_at76c503-i3861.bin																																										          BB-BONE-RTC-00A0.dtbo      cape-bone-dvi-00A0.dtbo	   rt2561s.bin
+atmel_at76c503-i3863.bin																																											      BB-BONE-SERL-01-00A1.dtbo  cape-bone-dvi-00A1.dtbo     rt2661.bin
+atmel_at76c503-rfmd-0.90.2-140.bin  BB-BONE-SERL-03-00A1.dtbo  cape-bone-dvi-00A2.dtbo																																				      				  rt2860.bin
+atmel_at76c503-rfmd-acc.bin	        BB-GPIOHELP-00A0.dtbo      cape-bone-exptest-00A0.dtbo																																							   rt2870.bin
+atmel_at76c503-rfmd.bin						       BB-I2C1-00A0.dtbo																																							          cape-bone-geiger-00A0.dtbo  rt3070.bin
+atmel_at76c504_2958-wpa.bin					           BB-I2C1A1-00A0.dtbo        cape-bone-hexy-00A0.dtbo																																				  			       rt3071.bin
+atmel_at76c504a_2958-wpa.bin						       BB-SPIDEV0-00A0.dtbo       cape-bone-ibb-00A0.dtbo																																						         rt3090.bin
+atmel_at76c504.bin							       				      BB-SPIDEV1-00A0.dtbo       cape-bone-iio-00A0.dtbo																																			   rt73.bin
+atmel_at76c504c-wpa.bin											      				     BB-SPIDEV1A1-00A0.dtbo     cape-bone-lcd3-00A0.dtbo																															     RTL8192E
+atmel_at76c505a-rfmd2958.bin														         BB-UART1-00A0.dtbo	       cape-bone-lcd3-00A2.dtbo																															       RTL8192SU
+atmel_at76c505-rfmd2958.bin															     BB-UART2-00A0.dtbo	              cape-bone-mrf24j40-00A0.dtbo																													        rtl_nic
+atmel_at76c505-rfmd.bin																     				          BB-UART2-RTSCTS-00A0.dtbo  cape-bone-nixie-00A0.dtbo																											 rtlwifi
+atmel_at76c506.bin																					  			         BB-UART4-00A0.dtbo																											        cape-bone-pinmux-test-00A0.dtbo  sd8385.bin
+atmel_at76c506-wpa.bin																									 																														    BB-UART4-RTSCTS-00A0.dtbo  cape-bone-proto-00A0.dtbo  sd8385_helper.bin
+BB-ADC-00A0.dtbo																																																							    			           BB-UART5-00A0.dtbo	         cape-bone-replicape-00A2.dtbo  sd8686.bin
+BB-BONE-AUDI-01-00A0.dtbo																																																										       bone_eqep1-00A0.dtbo       cape-bone-replicape-00A3.dtbo	 sd8686_helper.bin
+BB-BONE-BACON-00A0.dtbo																																																											       				      bone_pwm_P8_13-00A0.dtbo   cape-bone-tester-00A0.dtbo  sd8688.bin
+BB-BONE-BACONE-00A0.dtbo																																																														          bone_pwm_P8_19-00A0.dtbo   cape-bone-weather-00A0.dtbo  sd8688_helper.bin
+BB-BONE-BACONE2-00A0.dtbo																																																															      bone_pwm_P8_34-00A0.dtbo   cape-bone-weather-00B0.dtbo  ti-connectivity
+BB-BONE-CAM3-01-00A2.dtbo																																																															          bone_pwm_P8_36-00A0.dtbo   cape-CBB-Serial-r01.dtbo   TT3201-001-01.dtbo
+BB-BONE-CAM-VVDN-00A0.dtbo																																																																      bone_pwm_P8_45-00A0.dtbo   cape-univ-emmc-00A0.dtbo   usb8388.bin
+BB-BONE-CRYPTO-00A0.dtbo																																																																          bone_pwm_P8_46-00A0.dtbo   cape-universal-00A0.dtbo   zd1211
+BB-BONE-eMMC1-01-00A0.dtbo																																																																	      bone_pwm_P9_14-00A0.dtbo   cape-universaln-00A0.dtbo
+root@beaglebone:/lib/firmware# ls -lstr
+total 1676
+ 36 -rw-r--r-- 1 root root  35228 Jul 24  2008 atmel_at76c506-wpa.bin
+ 32 -rw-r--r-- 1 root root  31824 Jul 24  2008 atmel_at76c506.bin
+ 36 -rw-r--r-- 1 root root  35532 Jul 24  2008 atmel_at76c505-rfmd.bin
+ 40 -rw-r--r-- 1 root root  37000 Jul 24  2008 atmel_at76c505-rfmd2958.bin
+ 40 -rw-r--r-- 1 root root  37009 Jul 24  2008 atmel_at76c505a-rfmd2958.bin
+ 36 -rw-r--r-- 1 root root  35196 Jul 24  2008 atmel_at76c504c-wpa.bin
+ 32 -rw-r--r-- 1 root root  31748 Jul 24  2008 atmel_at76c504.bin
+ 40 -rw-r--r-- 1 root root  39928 Jul 24  2008 atmel_at76c504a_2958-wpa.bin
+ 36 -rw-r--r-- 1 root root  35180 Jul 24  2008 atmel_at76c504_2958-wpa.bin
+ 40 -rw-r--r-- 1 root root  37964 Jul 24  2008 atmel_at76c503-rfmd.bin
+ 40 -rw-r--r-- 1 root root  37804 Jul 24  2008 atmel_at76c503-rfmd-acc.bin
+ 36 -rw-r--r-- 1 root root  35372 Jul 24  2008 atmel_at76c503-rfmd-0.90.2-140.bin
+ 28 -rw-r--r-- 1 root root  28040 Jul 24  2008 atmel_at76c503-i3863.bin
+ 28 -rw-r--r-- 1 root root  28164 Jul 24  2008 atmel_at76c503-i3861.bin
+ 36 -rw-r--r-- 1 root root  35276 Jul 24  2008 atmel_at76c502-wpa.bin
+ 36 -rw-r--r-- 1 root root  35272 Jul 24  2008 atmel_at76c502e-wpa.bin
+ 32 -rw-r--r-- 1 root root  31776 Jul 24  2008 atmel_at76c502e.bin
+ 36 -rw-r--r-- 1 root root  35276 Jul 24  2008 atmel_at76c502d-wpa.bin
+ 32 -rw-r--r-- 1 root root  31764 Jul 24  2008 atmel_at76c502d.bin
+ 32 -rw-r--r-- 1 root root  31764 Jul 24  2008 atmel_at76c502.bin
+ 36 -rw-r--r-- 1 root root  35184 Jul 24  2008 atmel_at76c502_3com-wpa.bin
+ 32 -rw-r--r-- 1 root root  30348 Jul 24  2008 atmel_at76c502_3com.bin
+  0 lrwxrwxrwx 1 root root     23 Jan  6  2013 usb8388.bin -> libertas/usb8388_v5.bin
+  0 lrwxrwxrwx 1 root root     26 Jan  6  2013 sd8688_helper.bin -> libertas/sd8688_helper.bin
+  0 lrwxrwxrwx 1 root root     19 Jan  6  2013 sd8688.bin -> libertas/sd8688.bin
+  0 lrwxrwxrwx 1 root root     29 Jan  6  2013 sd8686_helper.bin -> libertas/sd8686_v8_helper.bin
+  0 lrwxrwxrwx 1 root root     22 Jan  6  2013 sd8686.bin -> libertas/sd8686_v8.bin
+  0 lrwxrwxrwx 1 root root     26 Jan  6  2013 sd8385_helper.bin -> libertas/sd8385_helper.bin
+  0 lrwxrwxrwx 1 root root     19 Jan  6  2013 sd8385.bin -> libertas/sd8385.bin
+  0 lrwxrwxrwx 1 root root     26 Jan  6  2013 libertas_cs_helper.fw -> libertas/cf8385_helper.bin
+  0 lrwxrwxrwx 1 root root     19 Jan  6  2013 libertas_cs.fw -> libertas/cf8385.bin
+120 -rw-r--r-- 1 root root 118888 Jan  6  2013 lbtf_usb.bin
+  4 -rw-r--r-- 1 root root   2048 Jan  6  2013 rt73.bin
+  4 -rw-r--r-- 1 root root   4096 Jan  6  2013 rt3071.bin
+  8 -rw-r--r-- 1 root root   8192 Jan  6  2013 rt2870.bin
+  8 -rw-r--r-- 1 root root   8192 Jan  6  2013 rt2860.bin
+  8 -rw-r--r-- 1 root root   8192 Jan  6  2013 rt2661.bin
+  8 -rw-r--r-- 1 root root   8192 Jan  6  2013 rt2561s.bin
+  8 -rw-r--r-- 1 root root   8192 Jan  6  2013 rt2561.bin
+  0 lrwxrwxrwx 1 root root     10 Jan  6  2013 rt3090.bin -> rt2860.bin
+  0 lrwxrwxrwx 1 root root     10 Jan  6  2013 rt3070.bin -> rt2870.bin
+  4 -rw-r--r-- 1 root root   2042 Apr 23 20:20 LICENCE.ti-connectivity
+  4 -rw-r--r-- 1 root root   2115 Apr 23 20:20 LICENCE.rtlwifi_firmware.txt
+  8 -rw-r--r-- 1 root root   4178 Apr 23 20:20 LICENCE.broadcom_bcm43xx
+  4 -rw-r--r-- 1 root root   1946 Apr 23 20:20 LICENCE.atheros_firmware
+ 52 -rw-r--r-- 1 root root  51272 Apr 23 20:20 htc_9271.fw
+ 16 -rw-r--r-- 1 root root  13388 Apr 23 20:20 carl9170-1.fw
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:20 brcm
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:20 ti-connectivity
+ 12 -rwxr-xr-x 1 root root  10796 Apr 23 20:20 am335x-pm-firmware.bin
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 mwl8k
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 libertas
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 rtl_nic
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 RTL8192SU
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 RTL8192E
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:35 rtlwifi
+  4 -rw-r--r-- 1 root root   1270 Apr 23 20:38 EBB-PRU-Example-00A0.dtbo
+  4 drwxr-xr-x 2 root root   4096 Apr 23 20:42 zd1211
+  4 -rw-r--r-- 1 root root   2850 Apr 23 20:57 TT3201-001-01.dtbo
+  4 -rw-r--r-- 1 root root   2895 Apr 23 20:57 DNIL-AMPCAPE-1-00R1.dtbo
+ 60 -rw-r--r-- 1 root root  57781 Apr 23 20:57 cape-universaln-00A0.dtbo
+ 68 -rw-r--r-- 1 root root  66220 Apr 23 20:57 cape-universal-00A0.dtbo
+ 16 -rw-r--r-- 1 root root  13705 Apr 23 20:57 cape-univ-emmc-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1721 Apr 23 20:57 cape-CBB-Serial-r01.dtbo
+  4 -rw-r--r-- 1 root root    574 Apr 23 20:57 cape-bone-weather-00B0.dtbo
+  4 -rw-r--r-- 1 root root   1358 Apr 23 20:57 cape-bone-weather-00A0.dtbo
+  8 -rw-r--r-- 1 root root   7189 Apr 23 20:57 cape-bone-tester-00A0.dtbo
+  8 -rw-r--r-- 1 root root   6275 Apr 23 20:57 cape-bone-replicape-00A3.dtbo
+  8 -rw-r--r-- 1 root root   5216 Apr 23 20:57 cape-bone-replicape-00A2.dtbo
+  8 -rw-r--r-- 1 root root   5663 Apr 23 20:57 cape-bone-proto-00A0.dtbo
+  4 -rw-r--r-- 1 root root    977 Apr 23 20:57 cape-bone-pinmux-test-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2440 Apr 23 20:57 cape-bone-nixie-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1549 Apr 23 20:57 cape-bone-mrf24j40-00A0.dtbo
+  8 -rw-r--r-- 1 root root   5972 Apr 23 20:57 cape-bone-lcd3-00A2.dtbo
+  8 -rw-r--r-- 1 root root   5327 Apr 23 20:57 cape-bone-lcd3-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1060 Apr 23 20:57 cape-bone-iio-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2965 Apr 23 20:57 cape-bone-ibb-00A0.dtbo
+  8 -rw-r--r-- 1 root root   4194 Apr 23 20:57 cape-bone-hexy-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2794 Apr 23 20:57 cape-bone-geiger-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1676 Apr 23 20:57 cape-bone-exptest-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2434 Apr 23 20:57 cape-bone-dvi-00A2.dtbo
+  4 -rw-r--r-- 1 root root   3844 Apr 23 20:57 cape-bone-dvi-00A1.dtbo
+  4 -rw-r--r-- 1 root root   2426 Apr 23 20:57 cape-bone-dvi-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2268 Apr 23 20:57 cape-boneblack-hdmin-00A0.dtbo
+  4 -rw-r--r-- 1 root root   3325 Apr 23 20:57 cape-boneblack-hdmi-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1677 Apr 23 20:57 cape-bone-argus-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2948 Apr 23 20:57 cape-bone-adafruit-lcd-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1266 Apr 23 20:57 cape-bone-2g-emmc1.dtbo
+ 12 -rw-r--r-- 1 root root  10176 Apr 23 20:57 cape-bebopr-R2.dtbo
+ 12 -rw-r--r-- 1 root root  10024 Apr 23 20:57 cape-bebopr-ena-R2.dtbo
+ 12 -rw-r--r-- 1 root root   9546 Apr 23 20:57 cape-bebopr-brdg-R2.dtbo
+  4 -rw-r--r-- 1 root root   1097 Apr 23 20:57 bone_pwm_P9_42-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_31-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_29-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1097 Apr 23 20:57 bone_pwm_P9_28-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_22-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_21-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_16-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P9_14-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_46-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_45-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_36-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_34-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_19-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1091 Apr 23 20:57 bone_pwm_P8_13-00A0.dtbo
+  4 -rw-r--r-- 1 root root    861 Apr 23 20:57 BB-UART5-00A0.dtbo
+  4 -rw-r--r-- 1 root root    936 Apr 23 20:57 BB-UART4-RTSCTS-00A0.dtbo
+  4 -rw-r--r-- 1 root root    861 Apr 23 20:57 BB-UART4-00A0.dtbo
+  4 -rw-r--r-- 1 root root    936 Apr 23 20:57 BB-UART2-RTSCTS-00A0.dtbo
+  4 -rw-r--r-- 1 root root    861 Apr 23 20:57 BB-UART2-00A0.dtbo
+  4 -rw-r--r-- 1 root root    861 Apr 23 20:57 BB-UART1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1185 Apr 23 20:57 BB-SPIDEV1A1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1185 Apr 23 20:57 BB-SPIDEV1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1185 Apr 23 20:57 BB-SPIDEV0-00A0.dtbo
+  4 -rw-r--r-- 1 root root    952 Apr 23 20:57 BB-I2C1A1-00A0.dtbo
+  4 -rw-r--r-- 1 root root    938 Apr 23 20:57 BB-I2C1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1331 Apr 23 20:57 BB-GPIOHELP-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 20:57 BB-BONE-SERL-03-00A1.dtbo
+  4 -rw-r--r-- 1 root root    875 Apr 23 20:57 BB-BONE-SERL-01-00A1.dtbo
+  4 -rw-r--r-- 1 root root   1198 Apr 23 20:57 BB-BONE-RTC-00A0.dtbo
+  4 -rw-r--r-- 1 root root    675 Apr 23 20:57 BB-BONE-RST2-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1758 Apr 23 20:57 BB-BONE-RST-00A0.dtbo
+  4 -rw-r--r-- 1 root root    853 Apr 23 20:57 BB-BONE-RS232-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1283 Apr 23 20:57 BB-BONE-PWMT-00A0.dtbo
+  4 -rw-r--r-- 1 root root   3014 Apr 23 20:57 BB-BONE-PRU-04-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2387 Apr 23 20:57 BB-BONE-PRU-03-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1405 Apr 23 20:57 BB-BONE-PRU-02-00A0.dtbo
+  4 -rw-r--r-- 1 root root    998 Apr 23 20:57 BB-BONE-PRU-01-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1158 Apr 23 20:57 BB-BONELT-BT-00A0.dtbo
+  8 -rw-r--r-- 1 root root   6033 Apr 23 20:57 BB-BONE-LCD7-01-00A4.dtbo
+  8 -rw-r--r-- 1 root root   6011 Apr 23 20:57 BB-BONE-LCD7-01-00A3.dtbo
+  8 -rw-r--r-- 1 root root   5981 Apr 23 20:57 BB-BONE-LCD7-01-00A2.dtbo
+  8 -rw-r--r-- 1 root root   5857 Apr 23 20:57 BB-BONE-LCD4-01-00A1.dtbo
+  4 -rw-r--r-- 1 root root   3634 Apr 23 20:57 BB-BONE-LCD4-01-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1284 Apr 23 20:57 BB-BONE-GPS-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1075 Apr 23 20:57 BB-BONE-GPEVT-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1266 Apr 23 20:57 BB-BONE-eMMC1-01-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2074 Apr 23 20:57 BB-BONE-CRYPTO-00A0.dtbo
+  4 -rw-r--r-- 1 root root   3592 Apr 23 20:57 BB-BONE-CAM-VVDN-00A0.dtbo
+  4 -rw-r--r-- 1 root root   3588 Apr 23 20:57 BB-BONE-CAM3-01-00A2.dtbo
+  8 -rw-r--r-- 1 root root   4536 Apr 23 20:57 BB-BONE-BACONE2-00A0.dtbo
+  4 -rw-r--r-- 1 root root   3259 Apr 23 20:57 BB-BONE-BACONE-00A0.dtbo
+  8 -rw-r--r-- 1 root root   4273 Apr 23 20:57 BB-BONE-BACON-00A0.dtbo
+  4 -rw-r--r-- 1 root root   2885 Apr 23 20:57 BB-BONE-AUDI-01-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1056 Apr 23 20:57 BB-ADC-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1181 Apr 23 20:57 am33xx_pwm-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART5-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART4-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART2-00A0.dtbo
+  4 -rw-r--r-- 1 root root    865 Apr 23 21:02 ADAFRUIT-UART1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1115 Apr 23 21:02 ADAFRUIT-SPI1-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1042 Apr 23 21:02 ADAFRUIT-SPI0-00A0.dtbo
+  4 -rw-r--r-- 1 root root    898 Apr 23 23:00 jpp-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1314 Apr 29 18:15 EBB-PRU-Example-jpp-00A0.dtbo
+  4 -rw-r--r-- 1 root root   1096 Aug 23  2016 bone_eqep1-00A0.dtbo
+root@beaglebone:/lib/firmware# rm jpp-00A0.dtbo 
+root@beaglebone:/lib/firmware# ls *jpp*
+EBB-PRU-Example-jpp-00A0.dtbo
+root@beaglebone:/lib/firmware# dmesg --clear
+root@beaglebone:/lib/firmware# echo EBB-PRU-Example-jpp > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/lib/firmware# dmesg
+[ 4223.299536] bone-capemgr bone_capemgr.9: part_number 'EBB-PRU-Example-jpp', version 'N/A'
+[ 4223.299714] bone-capemgr bone_capemgr.9: slot #14: generic override
+[ 4223.299760] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 14
+[ 4223.299809] bone-capemgr bone_capemgr.9: slot #14: 'Override Board Name,00A0,Override Manuf,EBB-PRU-Example-'
+[ 4223.300075] bone-capemgr bone_capemgr.9: slot #14: Requesting part number/version based 'EBB-PRU-Example--00A0.dtbo
+[ 4223.300378] bone-capemgr bone_capemgr.9: slot #14: Requesting firmware 'EBB-PRU-Example--00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[ 4223.337010] bone-capemgr bone_capemgr.9: failed to load firmware 'EBB-PRU-Example--00A0.dtbo'
+root@beaglebone:/lib/firmware# rm EBB-PRU-Example-jpp-00A0.dtbo 
+root@beaglebone:/lib/firmware# cd $OLDPWD
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build						EBB-PRU-Example-jpp-00A0.dtbo  EBB-PRU-Example-w-extra-gpio.dts   EBB-PRU-Example-w-gpios-00A0.dtbo
+build~						EBB-PRU-Example.orig.dts       EBB-PRU-Example-w-extra-gpio.dts~
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# rm EBB-PRU-Example-w-gpios-00A0.dtbo 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs rub
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs bue
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs build
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 28
+4 -rw-r--r-- 1 root root 1800 Apr 29 17:03 EBB-PRU-Example.orig.dts
+4 -rw-r--r-- 1 root root 2075 Apr 29 18:13 EBB-PRU-Example-w-extra-gpio.dts~
+4 -rwxr-xr-x 1 root root  147 Apr 29 18:14 build~
+4 -rw-r--r-- 1 root root 1314 Apr 29 18:14 EBB-PRU-Example-jpp-00A0.dtbo
+4 -rw-r--r-- 1 root root 2075 Apr 29 18:18 EBB-PRU-Example-w-extra-gpio.dts
+4 -rwxr-xr-x 1 root root  147 Apr 29 18:18 build
+4 -rw-r--r-- 1 root root 1314 Apr 29 18:18 jpp-EBB-PRU-Example-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# less jpp-EBB-PRU-Example-00A0.dtbo 
+"jpp-EBB-PRU-Example-00A0.dtbo" may be a binary file.  See it anyway? 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp jpp-EBB-PRU-Example-00A0.dtbo /lib/firmware/
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# echo jpp-EBB-PRU-Example > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# dmesg --clear
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# echo jpp-EBB-PRU-Example > $SLOTS
+bash: echo: write error: No such file or directory
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# dmesg
+[ 4422.258228] bone-capemgr bone_capemgr.9: part_number 'jpp-EBB-PRU-Example', version 'N/A'
+[ 4422.258406] bone-capemgr bone_capemgr.9: slot #16: generic override
+[ 4422.258451] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 16
+[ 4422.258500] bone-capemgr bone_capemgr.9: slot #16: 'Override Board Name,00A0,Override Manuf,jpp-EBB-PRU-Exam'
+[ 4422.258751] bone-capemgr bone_capemgr.9: slot #16: Requesting part number/version based 'jpp-EBB-PRU-Exam-00A0.dtbo
+[ 4422.258801] bone-capemgr bone_capemgr.9: slot #16: Requesting firmware 'jpp-EBB-PRU-Exam-00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[ 4422.294786] bone-capemgr bone_capemgr.9: failed to load firmware 'jpp-EBB-PRU-Exam-00A0.dtbo'
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs build
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# emacs EBB-PRU-Example-w-extra-gpio.dts
+
+[1]+  Stopped                 emacs EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# s
+bash: s: command not found
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build						EBB-PRU-Example-jpp-00A0.dtbo  EBB-PRU-Example-w-extra-gpio.dts   jpp-EBB-PRU-Example-00A0.dtbo
+build~						EBB-PRU-Example.orig.dts       EBB-PRU-Example-w-extra-gpio.dts~
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/bash
+
+echo "Compiling the overlay from .dts to .dtbo"
+
+dtc -O dtb -o jppprugpio-00A0.dtbo -b 0 -@ EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# fg
+emacs EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# diff *.dts
+14c14
+<    part-number = "EBB-PRU-Example";
+---
+>    part-number = "jppprugpio";
+19c19
+<          "P9.11", "P9.13", "P9.27", "P9.28", "pru0";
+---
+>          "P9.11", "P9.13", "P9.27", "P9.28", "P9.29", "P9.30", "P9.31", "pru0";
+34a35,39
+> // jpp new:
+>                0x194 0x05  // P9_29 pr1_pru0_pru_r30_1, MODE5 | OUTPUT | PRU
+>                0x198 0x05  // P9_30 pr1_pru0_pru_r30_2, MODE5 | OUTPUT | PRU
+>                0x190 0x05  // P9_31 pr1_pru0_pru_r30_0, MODE5 | OUTPUT | PRU
+> 
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ./build
+Compiling the overlay from .dts to .dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls -lstr
+total 32
+4 -rw-r--r-- 1 root root 1800 Apr 29 17:03 EBB-PRU-Example.orig.dts
+4 -rw-r--r-- 1 root root 1314 Apr 29 18:14 EBB-PRU-Example-jpp-00A0.dtbo
+4 -rw-r--r-- 1 root root 2075 Apr 29 18:18 EBB-PRU-Example-w-extra-gpio.dts~
+4 -rwxr-xr-x 1 root root  147 Apr 29 18:18 build~
+4 -rw-r--r-- 1 root root 1314 Apr 29 18:18 jpp-EBB-PRU-Example-00A0.dtbo
+4 -rwxr-xr-x 1 root root  138 Apr 29 18:20 build
+4 -rw-r--r-- 1 root root 2066 Apr 29 18:41 EBB-PRU-Example-w-extra-gpio.dts
+4 -rw-r--r-- 1 root root 1306 Apr 29 18:41 jppprugpio-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cp jppprugpio-00A0.dtbo /lib/firmware
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls /lib/firmware
+ADAFRUIT-SPI0-00A0.dtbo				       BB-BONE-GPEVT-00A0.dtbo    bone_pwm_P9_16-00A0.dtbo		 carl9170-1.fw
+ADAFRUIT-SPI1-00A0.dtbo				       				      BB-BONE-GPS-00A0.dtbo      bone_pwm_P9_21-00A0.dtbo   DNIL-AMPCAPE-1-00R1.dtbo
+ADAFRUIT-UART1-00A0.dtbo							          BB-BONE-LCD4-01-00A0.dtbo  bone_pwm_P9_22-00A0.dtbo   EBB-PRU-Example-00A0.dtbo
+ADAFRUIT-UART2-00A0.dtbo								      BB-BONE-LCD4-01-00A1.dtbo  bone_pwm_P9_28-00A0.dtbo   htc_9271.fw
+ADAFRUIT-UART4-00A0.dtbo								          BB-BONE-LCD7-01-00A2.dtbo  bone_pwm_P9_29-00A0.dtbo   jpp-EBB-PRU-Example-00A0.dtbo
+ADAFRUIT-UART5-00A0.dtbo									      BB-BONE-LCD7-01-00A3.dtbo  bone_pwm_P9_31-00A0.dtbo   jppprugpio-00A0.dtbo
+am335x-pm-firmware.bin										      				     BB-BONE-LCD7-01-00A4.dtbo  bone_pwm_P9_42-00A0.dtbo   lbtf_usb.bin
+am33xx_pwm-00A0.dtbo														     				    BB-BONELT-BT-00A0.dtbo     brcm     libertas
+atmel_at76c502_3com.bin																		    			           BB-BONE-PRU-01-00A0.dtbo   cape-bebopr-brdg-R2.dtbo   libertas_cs.fw
+atmel_at76c502_3com-wpa.bin																					       BB-BONE-PRU-02-00A0.dtbo   cape-bebopr-ena-R2.dtbo   libertas_cs_helper.fw
+atmel_at76c502.bin																						       				      BB-BONE-PRU-03-00A0.dtbo   cape-bebopr-R2.dtbo   LICENCE.atheros_firmware
+atmel_at76c502d.bin																										      				     BB-BONE-PRU-04-00A0.dtbo   cape-bone-2g-emmc1.dtbo   LICENCE.broadcom_bcm43xx
+atmel_at76c502d-wpa.bin																														     				    BB-BONE-PWMT-00A0.dtbo     cape-bone-adafruit-lcd-00A0.dtbo  LICENCE.rtlwifi_firmware.txt
+atmel_at76c502e.bin																																		    			           BB-BONE-RS232-00A0.dtbo    cape-bone-argus-00A0.dtbo  LICENCE.ti-connectivity
+atmel_at76c502e-wpa.bin																																						   			          BB-BONE-RST-00A0.dtbo      cape-boneblack-hdmi-00A0.dtbo  mwl8k
+atmel_at76c502-wpa.bin																																										  			         BB-BONE-RST2-00A0.dtbo     cape-boneblack-hdmin-00A0.dtbo  rt2561.bin
+atmel_at76c503-i3861.bin																																													     BB-BONE-RTC-00A0.dtbo      cape-bone-dvi-00A0.dtbo	      rt2561s.bin
+atmel_at76c503-i3863.bin																																													         BB-BONE-SERL-01-00A1.dtbo  cape-bone-dvi-00A1.dtbo     rt2661.bin
+atmel_at76c503-rfmd-0.90.2-140.bin  BB-BONE-SERL-03-00A1.dtbo  cape-bone-dvi-00A2.dtbo																																							 			     rt2860.bin
+atmel_at76c503-rfmd-acc.bin	        BB-GPIOHELP-00A0.dtbo      cape-bone-exptest-00A0.dtbo																																									      rt2870.bin
+atmel_at76c503-rfmd.bin						       BB-I2C1-00A0.dtbo																																									             cape-bone-geiger-00A0.dtbo  rt3070.bin
+atmel_at76c504_2958-wpa.bin					           BB-I2C1A1-00A0.dtbo        cape-bone-hexy-00A0.dtbo																																						     				  rt3071.bin
+atmel_at76c504a_2958-wpa.bin						       BB-SPIDEV0-00A0.dtbo       cape-bone-ibb-00A0.dtbo																																									    rt3090.bin
+atmel_at76c504.bin							       				      BB-SPIDEV1-00A0.dtbo       cape-bone-iio-00A0.dtbo																																					      rt73.bin
+atmel_at76c504c-wpa.bin											      				     BB-SPIDEV1A1-00A0.dtbo     cape-bone-lcd3-00A0.dtbo																																	        RTL8192E
+atmel_at76c505a-rfmd2958.bin														         BB-UART1-00A0.dtbo	       cape-bone-lcd3-00A2.dtbo																																		  RTL8192SU
+atmel_at76c505-rfmd2958.bin															     BB-UART2-00A0.dtbo	              cape-bone-mrf24j40-00A0.dtbo																																   rtl_nic
+atmel_at76c505-rfmd.bin																     				          BB-UART2-RTSCTS-00A0.dtbo  cape-bone-nixie-00A0.dtbo																													    rtlwifi
+atmel_at76c506.bin																					  			         BB-UART4-00A0.dtbo																													           cape-bone-pinmux-test-00A0.dtbo  sd8385.bin
+atmel_at76c506-wpa.bin																									 																																       BB-UART4-RTSCTS-00A0.dtbo  cape-bone-proto-00A0.dtbo  sd8385_helper.bin
+BB-ADC-00A0.dtbo																																																									       				      BB-UART5-00A0.dtbo            cape-bone-replicape-00A2.dtbo  sd8686.bin
+BB-BONE-AUDI-01-00A0.dtbo																																																												          bone_eqep1-00A0.dtbo       cape-bone-replicape-00A3.dtbo  sd8686_helper.bin
+BB-BONE-BACON-00A0.dtbo																																																														  			         bone_pwm_P8_13-00A0.dtbo   cape-bone-tester-00A0.dtbo  sd8688.bin
+BB-BONE-BACONE-00A0.dtbo																																																																	     bone_pwm_P8_19-00A0.dtbo   cape-bone-weather-00A0.dtbo  sd8688_helper.bin
+BB-BONE-BACONE2-00A0.dtbo																																																																	         bone_pwm_P8_34-00A0.dtbo   cape-bone-weather-00B0.dtbo  ti-connectivity
+BB-BONE-CAM3-01-00A2.dtbo																																																																		     bone_pwm_P8_36-00A0.dtbo   cape-CBB-Serial-r01.dtbo   TT3201-001-01.dtbo
+BB-BONE-CAM-VVDN-00A0.dtbo																																																																		         bone_pwm_P8_45-00A0.dtbo   cape-univ-emmc-00A0.dtbo   usb8388.bin
+BB-BONE-CRYPTO-00A0.dtbo																																																																			     bone_pwm_P8_46-00A0.dtbo   cape-universal-00A0.dtbo   zd1211
+BB-BONE-eMMC1-01-00A0.dtbo																																																																			         bone_pwm_P9_14-00A0.dtbo   cape-universaln-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# echo jppprugpio > $SLOTS
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# dmesg | tail
+[ 5753.774407] bone-capemgr bone_capemgr.9: slot #17: generic override
+[ 5753.774453] bone-capemgr bone_capemgr.9: bone: Using override eeprom data at slot 17
+[ 5753.774502] bone-capemgr bone_capemgr.9: slot #17: 'Override Board Name,00A0,Override Manuf,jppprugpio'
+[ 5753.775014] bone-capemgr bone_capemgr.9: slot #17: Requesting part number/version based 'jppprugpio-00A0.dtbo
+[ 5753.775068] bone-capemgr bone_capemgr.9: slot #17: Requesting firmware 'jppprugpio-00A0.dtbo' for board-name 'Override Board Name', version '00A0'
+[ 5753.775437] bone-capemgr bone_capemgr.9: slot #17: dtbo 'jppprugpio-00A0.dtbo' loaded; converting to live tree
+[ 5753.776397] bone-capemgr bone_capemgr.9: slot #17: #3 overlays
+[ 5753.796757] omap_hwmod: pruss: failed to hardreset
+[ 5753.808339] gpio-of-helper gpio_helper.14: ready
+[ 5753.808537] bone-capemgr bone_capemgr.9: slot #17: Applied #3 overlays.
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat $SLOTS
+ 0: 54:PF--- 
+ 1: 55:PF--- 
+ 2: 56:PF--- 
+ 3: 57:PF--- 
+ 4: ff:P-O-L Bone-LT-eMMC-2G,00A0,Texas Instrument,BB-BONE-EMMC-2G
+ 5: ff:P-O-- Bone-Black-HDMI,00A0,Texas Instrument,BB-BONELT-HDMI
+ 6: ff:P-O-- Bone-Black-HDMIN,00A0,Texas Instrument,BB-BONELT-HDMIN
+ 8: ff:P-O-L Override Board Name,00A0,Override Manuf,BB-ADC
+ 9: ff:P-O-L Override Board Name,00A0,Override Manuf,bone_pwm_P8_34
+10: ff:P-O-L Override Board Name,00A0,Override Manuf,am33xx_pwm
+17: ff:P-O-L Override Board Name,00A0,Override Manuf,jppprugpio
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# ls
+build						EBB-PRU-Example-jpp-00A0.dtbo  EBB-PRU-Example-w-extra-gpio.dts   jpp-EBB-PRU-Example-00A0.dtbo
+build~						EBB-PRU-Example.orig.dts       EBB-PRU-Example-w-extra-gpio.dts~  jppprugpio-00A0.dtbo
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat EBB-PRU-Example-w-extra-gpio.dts
+/* Device Tree Overlay for enabling the pins that are used in Chapter 13
+* This overlay is based on the BB-PRU-01 overlay
+* Written by Derek Molloy for the book "Exploring BeagleBone: Tools and 
+* Techniques for Building with Embedded Linux" by John Wiley & Sons, 2014
+* ISBN 9781118935125. Please see the file README.md in the repository root 
+* directory for copyright and GNU GPLv3 license information.
+*/
+/dts-v1/;
+/plugin/;
+
+/ {
+   compatible = "ti,beaglebone", "ti,beaglebone-black";
+
+   part-number = "jppprugpio";
+   version = "00A0";
+
+   /* This overlay uses the following resources */
+   exclusive-use =
+         "P9.11", "P9.13", "P9.27", "P9.28", "P9.29", "P9.30", "P9.31", "pru0";
+
+   fragment@0 {
+      target = <&am33xx_pinmux>;
+      __overlay__ {
+
+         gpio_pins: pinmux_gpio_pins {         // The GPIO pins
+            pinctrl-single,pins = <
+               0x070 0x07  // P9_11 MODE7 | OUTPUT | GPIO pull-down
+               0x074 0x27  // P9_13 MODE7 | INPUT | GPIO pull-down
+            >;
+         };
+
+         pru_pru_pins: pinmux_pru_pru_pins {   // The PRU pin modes
+            pinctrl-single,pins = <
+               0x1a4 0x05  // P9_27 pr1_pru0_pru_r30_5, MODE5 | OUTPUT | PRU
+// jpp new:
+               0x194 0x05  // P9_29 pr1_pru0_pru_r30_1, MODE5 | OUTPUT | PRU
+               0x198 0x05  // P9_30 pr1_pru0_pru_r30_2, MODE5 | OUTPUT | PRU
+               0x190 0x05  // P9_31 pr1_pru0_pru_r30_0, MODE5 | OUTPUT | PRU
+
+               0x19c 0x26  // P9_28 pr1_pru0_pru_r31_3, MODE6 | INPUT | PRU
+            >;
+         };
+      };
+   };
+
+   fragment@1 {         // Enable the PRUSS
+      target = <&pruss>;
+      __overlay__ {
+         status = "okay";
+         pinctrl-names = "default";
+         pinctrl-0 = <&pru_pru_pins>;
+      };
+   };
+
+   fragment@2 {         // Enable the GPIOs
+      target = <&ocp>;
+      __overlay__ {
+         gpio_helper {
+            compatible = "gpio-of-helper";
+            status = "okay";
+            pinctrl-names = "default";
+            pinctrl-0 = <&gpio_pins>;
+         };
+      };
+   };
+};
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# cat build
+#!/bin/bash
+
+echo "Compiling the overlay from .dts to .dtbo"
+
+dtc -O dtb -o jppprugpio-00A0.dtbo -b 0 -@ EBB-PRU-Example-w-extra-gpio.dts
+root@beaglebone:/home/debian/BB_PRU_stuff/GPIO# 
+
+
+
+

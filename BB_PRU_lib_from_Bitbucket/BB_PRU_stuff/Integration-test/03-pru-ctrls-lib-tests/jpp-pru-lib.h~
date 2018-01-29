@@ -1,0 +1,12 @@
+#ifndef JPPPRULIB_H
+#define JPPPRULIB_H
+
+
+#include <prussdrv.h>
+#include <pruss_intc_mapping.h>
+
+
+
+
+
+#endif  // header guard

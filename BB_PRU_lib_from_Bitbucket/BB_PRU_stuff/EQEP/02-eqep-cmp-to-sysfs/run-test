@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+
+gcc -g -Wall -Werror -pthread -lstdc++ -std=gnu99  -c jadcpwmeqep.c
+
+gcc -g --std=gnu99 jpp_test_eqep.c jadcpwmeqep.o -o jpp_test_eqep -lprussdrv -lpthread
+
+echo "Running jpp_test_eqep"
+
+./jpp_test_eqep
+

@@ -1,0 +1,25 @@
+// I'm pretty much following the instructions in pg 2308 of the SPRUH73N AM335x TRM to initialize the PWMSS for simple square wave.
+// Justin Pearson
+// Sep 12, 2016
+
+#include "pwm-registers.hp"
+
+// Register Bit Value Comments
+// TBPRD TBPRD 600 (258h) Period = 601 TBCLK counts
+// TBPHS TBPHS 0 Clear Phase Register to 0
+// TBCNT TBCNT 0 Clear TB counter
+// TBCTL CTRMODE TB_UP PHSEN TB_DISABLE PRDLD TB_SHADOW SYNCOSEL TB_SYNC_DISABLE HSPCLKDIV TB_DIV1
+// Phase loading disabled
+// TBCLK = SYSCLK
+// CLKDIV TB_DIV1 CMPA CMPA 350 (15Eh) Compare A = 350 TBCLK counts
+// CMPB CMPB 200 (C8h) Compare B = 200 TBCLK counts
+// CMPCTL SHDWAMODE CC_SHADOW SHDWBMODE CC_SHADOW LOADAMODE CC_CTR_ZERO Load on CTR = 0
+// LOADBMODE CC_CTR_ZERO Load on CTR = 0
+// ZRO AQ_SET CAU AQ_CLEAR ZRO AQ_SET CBU AQ_CLEAR
+// AQCTLA
+// AQCTLB
+// Table 15-22. EPWMx Run Time Changes for Figure 15-28
+// 2308
+// Register Bit Value Comments
+// CMPA CMPA Duty1A Adjust duty for output EPWM1A
+	

@@ -1,0 +1,57 @@
+This program demonstrates how the PRU delivers timestamped ADC samples to the CPU.
+
+- The samples live in the PRU0 data ram. 
+- There are 10 samples in a 'buffer'.
+- There is a simple locking mechanism to prevent the CPU from reading samples mid-PRU-write.
+
+- There are 2 buffers, so that the PRU can be populating one while the
+  CPU is copying samples out of the other.
+
+- When the CPU reads a buffer, it reads all the samples out of the buffer.
+- Each sample is 2 32-bit uints: 
+  - the PRU cycle counter right before the sample was taken
+  - the ADC value (0-4095) representing 0-1.8V at ADC channel 0
+
+
+PRU is always filling bakbuf, and when he sees that CPU wants info, he
+copies it into buf and says it's ready.
+
+- PRU code:
+  - Spin until a sample-time. (Every 5ms)
+  - Start an ADC sample.
+  - Spin until ADC sample completes.
+  - Copy into backbuf.
+  - If "CPU wants" bit set and "Data delivered" bit not set,
+    - Copy backbuf into buf.
+    - Set "Data delivered" bit.
+
+- CPU code:
+  - Spin until a read-time. (Every 20ms)
+  - Set "CPU wants" bit.
+  - Spin until "Data ready" bit.
+  - Copy buf into local array.
+  - Clear "CPU wants" bit.
+  - Print out samples.
+
+
+Old idea: each dev has a "wants" and a "using" bit. Too complicated.
+
+- CPU code:
+  - 5 times, at 20ms apart:
+    - Set "CPU wants" bit.
+    - Read "PRU using" bit until it reads "not using". 
+    - Now CPU has sole access to buf.
+    - Copy all 10 samples out of the buf to a local array.
+    - Clear "CPU wants" bit.
+
+- PRU code:
+  - Spin until a sample time.
+  - Start an ADC sample.
+  - Spin until ADC sample completes.
+  - Copy into backbuf.
+  - Set "PRU wants" bit.
+  - Read "CPU using" bit until it 
+  - If "CPU wants" bit is set, can't copy to buf. Set "dirty" bit on buf0. Return to "spin until sample time".
+  - 
+  
+
